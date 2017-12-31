@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <body>
+    
+      <ui:composition>
+        
+        <table id="headerTable">
+          <tr>
+            <td>
+              <ul id="menu">
+                <li> <h:link value="#{msg['gen.backToMain']}" outcome="index.xhtml" 
+                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.requests']}" outcome="requests.xhtml"
+                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.events']}" outcome="events.xhtml"
+                             rendered="#{loginManager.adminLoggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.users']}" outcome="users.xhtml"
+                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.admin']}" outcome="admin.xhtml"
+                             rendered="#{loginManager.adminLoggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.login']}" outcome="login.xhtml"
+                             rendered="#{!loginManager.loggedIn}"> </h:link> </li>
+              </ul>
+            </td>
+            <td style="padding: 2px 6px 2px 18px">
+              <h:outputText value="#{loginManager.currentUser.loginName}" />
+            </td>
+            <td>
+              <h:form>
+                <h:commandButton value="#{msg['main.logout']}" action="#{loginManager.logout()}"
+                                 rendered="#{loginManager.loggedIn}"/>
+              </h:form>
+            </td>
+            <td>
+              <h:form id="langForm">
+                <h:selectOneMenu value="#{language.localeCode}" onchange="submit()"
+                                 valueChangeListener="#{language.countryLocaleCodeChanged}">
+                  <f:selectItems value="#{language.countriesInMap}" />
+                </h:selectOneMenu>
+              </h:form>
+            </td>
+          </tr>
+        </table>
+      
+        <hr/>
+        
+      </ui:composition>
+
+    </body>
+</html>
+
+

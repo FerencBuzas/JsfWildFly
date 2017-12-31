@@ -16,6 +16,8 @@
  */
 package ulygroup.data;
 
+import ulygroup.model.Member;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -25,8 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-import ulygroup.model.Member;
-
 @RequestScoped
 public class MemberListProducer {
 
@@ -35,8 +35,8 @@ public class MemberListProducer {
 
     private List<Member> members;
 
-    // @Named provides access the return value via the EL variable name "members" in the UI (e.g.,
-    // Facelets or JSP view)
+    // @Named provides access the return value via the EL variable name "members" in the UI
+    // (e.g. Facelets or JSP view)
     @Produces
     @Named
     public List<Member> getMembers() {

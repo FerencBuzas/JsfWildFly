@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Ulyssys Task</title>
+</h:head>
+
+<h:body>
+    <ui:composition template="/template/commonLayout.xhtml">
+      <ui:define name="content">
+        <h:outputStylesheet library="css" name="style.css"  />
+        
+        <h2><h:outputText value="#{msg['req.title']}" /></h2>
+    
+        <h:dataTable id="reqTable" 
+                value="#{reqList.list}" var="r"
+                styleClass="feri-table"
+                headerClass="feri-table-header"
+                rowClasses="feri-table-odd-row,feri-table-even-row">
+        
+          <!-- Id -->
+          <h:column>
+            <f:facet name="header">Id</f:facet>
+            <h:outputText value="#{r.id}" />
+          </h:column>
+
+          <!-- User -->
+          <h:column>
+            <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
+            <h:outputText value="#{r.user.name}" />
+          </h:column>
+
+          <!-- Sum -->
+          <h:column>
+            <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
+            <h:outputText value="#{r.sum}" styleClass="feri-sum" />
+          </h:column>
+
+          <!-- Status -->
+          <h:column>
+            <f:facet name="header"><h:outputText value="#{msg['req.state']}" /> </f:facet>
+            <span class="#{r.rejected ? 'bg-red' : 'bg-white'}">
+              <h:selectBooleanCheckbox value="#{r.accepted}" disabled="true" />
+            </span>
+          </h:column>
+
+          <!-- Mod -->
+          <h:column>
+            <f:facet name="header"><h:outputText value="#{msg['gen.mod']}" /> </f:facet>
+            <h:commandButton value="Mod" rendered="#{r.requested}">
+              <f:ajax listener="#{reqList.modify}" execute="@this" event="click"
+                      render="reqForm"/>
+            </h:commandButton>
+          </h:column>
+
+          <!-- Del ; not Ajax, the table must be refreshed anyway -->
+          <h:column>
+            <f:facet name="header"><h:outputText value="#{msg['gen.del']}" /> </f:facet>
+            <h:form>
+              <h:commandButton value="X" action="#{reqList.delete(r.id)}"
+                               rendered="#{r.requested}"/>
+            </h:form>
+          </h:column>
+
+        </h:dataTable>
+
+        <br/>
+
+        <!-- [New] -->
+        <h:commandButton value="New" styleClass="left160">
+          <f:ajax listener="#{reqList.newReq}" execute="@this" event="click"
+                  render="reqForm"/>
+        </h:commandButton>
+
+        <!-- form for Mod, New -->
+        <h:form id="reqForm">
+          <br/>
+          <h:panelGrid id="reqPanelGrid" columns="1" rendered="#{reqList.editing}">
+
+          <!-- title -->
+          
+          <h:outputLabel rendered="#{reqList.editingId==0}" value="New Request" styleClass="feriH3"/>
+          <h:outputLabel rendered="#{reqList.editingId!=0}" value="Modify Request" styleClass="feriH3" />
+
+          <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{reqList.editing}">
+
+            <!-- sum -->
+            <h:outputLabel for="sumInput" value="Sum:" />
+            <h:inputText id="sumInput" value="#{req.sum}"
+                         required="true" label="Sum">
+              <f:convertNumber integerOnly="true" />
+              <f:validateLongRange minimum="100" maximum="999999999" />
+            </h:inputText>
+            <h:message for="sumInput" display="icon" />
+
+            <!-- [Submit] -->
+            <h:commandButton value="Submit" action="#{req.submit()}" />
+            
+            <!-- [Cancel] -->
+            <h:commandButton value="Cancel" action="#{reqList.setEditing(false)}"
+                             immediate="true" />
+
+          </h:panelGrid>
+          </h:panelGrid>
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+
+</h:body>
+</html>

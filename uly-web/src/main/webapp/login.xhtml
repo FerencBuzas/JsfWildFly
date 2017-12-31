@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Login</title>
+    <f:metadata>
+        <f:viewAction action="#{loginManager.isLoggedInForwardHome()}" />
+    </f:metadata>
+</h:head>
+
+<h:body>
+
+  <ui:composition template="/template/commonLayout.xhtml">
+    <ui:define name="content">
+      <h:outputStylesheet library="css" name="style.css"  />
+
+      <h2 styleClass="left80"><h:outputText value="#{msg['login.title']}" /></h2>
+      
+      <h:form>
+        <h:messages id="messages" showDetail="false" />
+
+          <h:panelGrid columns="3" cellpadding="5">
+
+            <!-- login name -->
+            <h:outputLabel for="loginName" value="Login name:" />
+            <h:inputText id="loginName" value="#{loginManager.loginName}"
+                         required="true" label="Login name">
+              <f:validateLength minimum="3" />
+            </h:inputText>
+            <h:message for="loginName" display="icon" />
+
+            <!-- password -->
+            <h:outputLabel for="password" value="Password:" />
+            <h:inputSecret id="password"
+                        value="#{loginManager.userPassword}" required="true">
+              <f:validateLength minimum="3" />
+            </h:inputSecret>
+            <h:message for="password" display="icon" />
+
+          </h:panelGrid>
+          <br/>
+
+          <h:commandButton value="Login" update="loginPanel messages"
+                           action="#{loginManager.login()}" styleClass="left80" />
+      </h:form>
+      
+    </ui:define>
+  </ui:composition>
+</h:body>
+</html>

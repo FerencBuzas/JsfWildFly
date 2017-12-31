@@ -1,27 +1,8 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package ulygroup.rest;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
+import ulygroup.data.MemberRepository;
+import ulygroup.model.Member;
+import ulygroup.service.MemberRegistration;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -39,14 +20,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import ulygroup.data.MemberRepository;
-import ulygroup.model.Member;
-import ulygroup.service.MemberRegistration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * JAX-RS Example
- * <p/>
  * This class produces a RESTful service to read/write the contents of the members table.
  */
 @Path("/members")
@@ -90,7 +72,7 @@ public class MemberResourceRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createMember(Member member) {
 
-        Response.ResponseBuilder builder = null;
+        Response.ResponseBuilder builder;
 
         try {
             // Validates member using bean validation
@@ -105,12 +87,12 @@ public class MemberResourceRESTService {
             builder = createViolationResponse(ce.getConstraintViolations());
         } catch (ValidationException e) {
             // Handle the unique constrain violation
-            Map<String, String> responseObj = new HashMap<String, String>();
+            Map<String, String> responseObj = new HashMap<>();
             responseObj.put("email", "Email taken");
             builder = Response.status(Response.Status.CONFLICT).entity(responseObj);
         } catch (Exception e) {
             // Handle generic exceptions
-            Map<String, String> responseObj = new HashMap<String, String>();
+            Map<String, String> responseObj = new HashMap<>();
             responseObj.put("error", e.getMessage());
             builder = Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
         }
@@ -132,7 +114,7 @@ public class MemberResourceRESTService {
      * @throws ConstraintViolationException If Bean Validation errors exist
      * @throws ValidationException If member with the same email already exists
      */
-    private void validateMember(Member member) throws ConstraintViolationException, ValidationException {
+    private void validateMember(Member member) throws ValidationException {
         // Create a bean validator and check for issues.
         Set<ConstraintViolation<Member>> violations = validator.validate(member);
 
@@ -156,7 +138,7 @@ public class MemberResourceRESTService {
     private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
         log.fine("Validation completed. violations found: " + violations.size());
 
-        Map<String, String> responseObj = new HashMap<String, String>();
+        Map<String, String> responseObj = new HashMap<>();
 
         for (ConstraintViolation<?> violation : violations) {
             responseObj.put(violation.getPropertyPath().toString(), violation.getMessage());
