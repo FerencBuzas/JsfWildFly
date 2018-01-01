@@ -17,9 +17,6 @@ public class RequestList implements Serializable {
     private LoginManager loginManager;
 
     @Inject
-    private UserList userList;
-
-    @Inject
     private TestData testData;
     
     private long lastId;
@@ -131,9 +128,6 @@ public class RequestList implements Serializable {
     public LoginManager getLoginManager() { return loginManager; }
     public void setLoginManager(LoginManager loginManager) {this.loginManager = loginManager; }
     
-    public UserList getUserList() { return userList; }
-    public void setUserList(UserList userList) { this.userList = userList; }
-
     public void setTestData(TestData testData) { this.testData = testData;  }
 
     // --- data ---

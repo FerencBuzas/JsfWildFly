@@ -4,10 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@XmlRootElement
 @Table(name = "User" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
 public class User {
 

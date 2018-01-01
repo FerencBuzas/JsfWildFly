@@ -14,26 +14,26 @@
             <td>
               <ul id="menu">
                 <li> <h:link value="#{msg['gen.backToMain']}" outcome="index.xhtml" 
-                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                             rendered="#{loginController.loggedIn}"> </h:link> </li>
                 <li> <h:link value="#{msg['main.requests']}" outcome="requests.xhtml"
-                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                             rendered="#{loginController.loggedIn}"> </h:link> </li>
                 <li> <h:link value="#{msg['main.events']}" outcome="events.xhtml"
-                             rendered="#{loginManager.adminLoggedIn}"> </h:link> </li>
+                             rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
                 <li> <h:link value="#{msg['main.users']}" outcome="users.xhtml"
-                             rendered="#{loginManager.loggedIn}"> </h:link> </li>
+                             rendered="#{loginController.loggedIn}"> </h:link> </li>
                 <li> <h:link value="#{msg['main.admin']}" outcome="admin.xhtml"
-                             rendered="#{loginManager.adminLoggedIn}"> </h:link> </li>
+                             rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
                 <li> <h:link value="#{msg['main.login']}" outcome="login.xhtml"
-                             rendered="#{!loginManager.loggedIn}"> </h:link> </li>
+                             rendered="#{!loginController.loggedIn}"> </h:link> </li>
               </ul>
             </td>
             <td style="padding: 2px 6px 2px 18px">
-              <h:outputText value="#{loginManager.currentUser.loginName}" />
+              <h:outputText value="#{loginController.currentUser.loginName}" />
             </td>
             <td>
               <h:form>
-                <h:commandButton value="#{msg['main.logout']}" action="#{loginManager.logout()}"
-                                 rendered="#{loginManager.loggedIn}"/>
+                <h:commandButton value="#{msg['main.logout']}" action="#{loginController.logout()}"
+                                 rendered="#{loginController.loggedIn}"/>
               </h:form>
             </td>
             <td>

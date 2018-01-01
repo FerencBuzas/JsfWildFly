@@ -16,7 +16,7 @@ public class EventList implements Serializable {
     
     @Inject
     private LoginManager loginManager;
-
+    
     @Inject
     private TestData testData;
 

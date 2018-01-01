@@ -8,7 +8,7 @@
 <h:head>
     <title>Login</title>
     <f:metadata>
-        <f:viewAction action="#{loginManager.isLoggedInForwardHome()}" />
+        <f:viewAction action="#{loginController.ifLoggedInForwardHome()}" />
     </f:metadata>
 </h:head>
 
@@ -23,29 +23,27 @@
       <h:form>
         <h:messages id="messages" showDetail="false" />
 
-          <h:panelGrid columns="3" cellpadding="5">
+        <h:panelGrid columns="3" cellpadding="5">
 
-            <!-- login name -->
-            <h:outputLabel for="loginName" value="Login name:" />
-            <h:inputText id="loginName" value="#{loginManager.loginName}"
-                         required="true" label="Login name">
-              <f:validateLength minimum="3" />
-            </h:inputText>
-            <h:message for="loginName" display="icon" />
+          <h:outputLabel for="loginName" value="Login name:" />
+          <h:inputText id="loginName" value="#{loginController.loginName}"
+                       required="true" label="Login name">
+            <f:validateLength minimum="3" />
+          </h:inputText>
+          <h:message for="loginName" display="icon" />
 
-            <!-- password -->
-            <h:outputLabel for="password" value="Password:" />
-            <h:inputSecret id="password"
-                        value="#{loginManager.userPassword}" required="true">
-              <f:validateLength minimum="3" />
-            </h:inputSecret>
-            <h:message for="password" display="icon" />
+          <h:outputLabel for="password" value="Password:" />
+          <h:inputSecret id="password"
+                         value="#{loginController.userPassword}" required="true">
+            <f:validateLength minimum="3" />
+          </h:inputSecret>
+          <h:message for="password" display="icon" />
 
-          </h:panelGrid>
-          <br/>
+        </h:panelGrid>
+        <br/>
 
-          <h:commandButton value="Login" update="loginPanel messages"
-                           action="#{loginManager.login()}" styleClass="left80" />
+        <h:commandButton value="Login" update="loginPanel messages"
+                         action="#{loginController.login()}" styleClass="left80" />
       </h:form>
       
     </ui:define>
