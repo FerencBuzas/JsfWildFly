@@ -1,12 +1,14 @@
 package ulygroup.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "User" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
+@Table(name = "myuser" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
 public class User {
 
     public static final String ROLE_ADMIN = "A";
@@ -15,12 +17,20 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
-    
-    private String name = "";
-    private String loginName = "";
-    private String password = "";
-    private String role = ROLE_USER;
 
+    @NotNull
+    private String name = "";
+    
+    @Column(name = "login_name")
+    private String loginName = "";
+    
+    @NotNull
+    private String password = "";
+    
+    @NotNull
+    private String role = ROLE_USER;
+    
+    
     public User() {
     }
 

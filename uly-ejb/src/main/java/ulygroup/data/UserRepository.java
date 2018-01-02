@@ -43,13 +43,13 @@ public class UserRepository {
     public List<User> findAll() {
         LOGGER.info("## findAll()");
         
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<User> criteria = cb.createQuery(User.class);
-//        Root<User> user = criteria.from(User.class);
-//        
-//        criteria.select(user).orderBy(cb.asc(user.get("loginName")));
-//        return em.createQuery(criteria).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = cb.createQuery(User.class);
+        Root<User> user = criteria.from(User.class);
+
+        criteria.select(user).orderBy(cb.asc(user.get("loginName")));
+        return em.createQuery(criteria).getResultList();
         
-        return em.createQuery("from User", User.class).getResultList();
+//        return em.createQuery("from User", User.class).getResultList();
     }
 }

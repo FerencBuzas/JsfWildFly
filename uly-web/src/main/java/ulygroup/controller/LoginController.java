@@ -28,13 +28,13 @@ public class LoginController implements Serializable {
     private UserController userController;
     
     private String loginName;
-    private String userPassword;
+    private String password;
 
     public String login() {
 
-        LOGGER.info("login() name=" + loginName + " password=" + userPassword);
+        LOGGER.info("login() name=" + loginName + " password=" + password);
                 
-        if (loginManager.login(loginName, userPassword)) {
+        if (loginManager.login(loginName, password)) {
             return HOME_PAGE_REDIRECT;
         } 
         else {
@@ -71,8 +71,8 @@ public class LoginController implements Serializable {
     public String getLoginName() { return loginName; }
     public void setLoginName(String loginName) { this.loginName = loginName; }
 
-    public String getUserPassword() { return userPassword; }
-    public void setUserPassword(String userPassword) { this.userPassword = userPassword; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
     
     public User getCurrentUser() { return loginManager.getCurrentUser(); }
 

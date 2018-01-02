@@ -3,22 +3,31 @@
 DROP DATABASE IF EXISTS uly;
 CREATE DATABASE uly;
 
+CREATE USER IF NOT EXISTS feri IDENTIFIED BY 'feri';
+CREATE USER IF NOT EXISTS bea IDENTIFIED BY 'bea';
+CREATE USER IF NOT EXISTS marci IDENTIFIED BY 'marci';
+
 USE uly;
 
-DROP TABLE IF EXISTS user, request, event;
+-- GRANT ALL PRIVILEGES ON uly.* TO 'feri'@'localhost';
+GRANT ALL PRIVILEGES ON uly TO 'feri';
+GRANT ALL PRIVILEGES ON uly TO 'bea';
+GRANT ALL PRIVILEGES ON uly TO 'marci';
+
+DROP TABLE IF EXISTS myuser, request, event;
 
 -- -------------------------------------------------
-CREATE TABLE user
-  (id        int(5) NOT NULL PRIMARY KEY,
-   name      varchar(40) NOT NULL,
-   loginName varchar(20) NOT NULL,
-   password  varchar(20),
-   role      char(1)
+CREATE TABLE myuser
+  (id         int(5) NOT NULL PRIMARY KEY,
+   name       varchar(40) NOT NULL,
+   loginName  varchar(20) NOT NULL,
+   password   varchar(20),
+   role       char(1)
   );
 
-INSERT INTO user VALUES (1, 'Feri',  'feri',  'feri',  'A');
-INSERT INTO user VALUES (2, 'Bea',   'bea',   'bea',   'U');
-INSERT INTO user VALUES (3, 'Marci', 'marci', 'marci', 'U');
+INSERT INTO myuser VALUES (1, 'Buzas Feri',  'feri',  'feri',  'A');
+INSERT INTO myuser VALUES (2, 'Buzas Bea',   'bea',   'bea',   'U');
+INSERT INTO myuser VALUES (3, 'Buzas Marci', 'marci', 'marci', 'U');
 
 -- -------------------------------------------------
 CREATE TABLE request
@@ -39,7 +48,7 @@ INSERT INTO request VALUES (6, 3,  100000,  'R');
 CREATE TABLE event
   (id        int(5) NOT NULL PRIMARY KEY,
    time      datetime NOT NULL,    
-   user      int(5) NOT NULL REFERENCES user,
+   user      int(5) NOT NULL REFERENCES myuser,
    eventName varchar(20) NOT NULL,
    success   char(1)   -- 'Y', 'N'
   );

@@ -11,7 +11,7 @@
     <driver>mysql</driver>
     <security>
       <user-name>feri</user-name>
-      <password>Feri</password>
+      <password>feri</password>
     </security>
   </datasource>
 

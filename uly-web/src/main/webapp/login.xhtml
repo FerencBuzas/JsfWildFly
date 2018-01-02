@@ -34,7 +34,7 @@
 
           <h:outputLabel for="password" value="Password:" />
           <h:inputSecret id="password"
-                         value="#{loginController.userPassword}" required="true">
+                         value="#{loginController.password}" required="true">
             <f:validateLength minimum="3" />
           </h:inputSecret>
           <h:message for="password" display="icon" />
