@@ -3,10 +3,11 @@ package ulygroup.data;
 import org.jboss.logging.Logger;
 import ulygroup.model.User;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.List;
 
+@ApplicationScoped
 public class LoginManager implements Serializable {
 
     private static final long serialVersionUID = -8908908908L;
@@ -22,8 +23,8 @@ public class LoginManager implements Serializable {
         
         LOGGER.info("## login() name=" + loginName);
         
-        List<User> userList = userRepository.findAll();
-        LOGGER.info("## userList: " + userList);
+//        List<User> userList = userRepository.findAll();
+//        LOGGER.info("## userList: " + userList);
         
         currentUser = userRepository.findByLoginName(loginName);
         
