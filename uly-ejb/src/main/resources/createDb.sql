@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS myuser, request, event;
 CREATE TABLE myuser
   (id         int(5) NOT NULL PRIMARY KEY,
    name       varchar(40) NOT NULL,
-   loginName  varchar(20) NOT NULL,
+   login_name varchar(20) NOT NULL,
    password   varchar(20),
    role       char(1)
   );
@@ -32,7 +32,7 @@ INSERT INTO myuser VALUES (3, 'Buzas Marci', 'marci', 'marci', 'U');
 -- -------------------------------------------------
 CREATE TABLE request
   (id       int(5) NOT NULL PRIMARY KEY,
-   user     int(5) NOT NULL REFERENCES user,
+   user     int(5) NOT NULL, -- REFERENCES myuser,
    sum      int(8),
    state    char(1)   -- 'R'eq, 'A'cc, 'X' (rejected)
   );
@@ -48,7 +48,7 @@ INSERT INTO request VALUES (6, 3,  100000,  'R');
 CREATE TABLE event
   (id        int(5) NOT NULL PRIMARY KEY,
    time      datetime NOT NULL,    
-   user      int(5) NOT NULL REFERENCES myuser,
+   user      int(5) NOT NULL, -- REFERENCES myuser,
    eventName varchar(20) NOT NULL,
    success   char(1)   -- 'Y', 'N'
   );
