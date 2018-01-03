@@ -3,16 +3,17 @@ package ulygroup.data;
 import org.jboss.logging.Logger;
 import ulygroup.model.Request;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 
-@SessionScoped
+// @ApplicationScoped
+@Stateless
 public class RequestRepository implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(RequestRepository.class);
@@ -41,7 +42,7 @@ public class RequestRepository implements Serializable {
         list = em.createQuery(criteria).getResultList();
         
         list = em.createQuery("from Request", ulygroup.model.Request.class).getResultList();
-        LOGGER.info("\n\n###### list: " + list + "\n\n#####\n\n");
+        LOGGER.info("\n\n###### list: " + list + "\n#####\n\n");
         
         return list;
     }

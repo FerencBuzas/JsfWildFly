@@ -4,6 +4,7 @@ import org.jboss.logging.Logger;
 import ulygroup.data.LoginManager;
 import ulygroup.data.RequestRepository;
 import ulygroup.model.Request;
+import ulygroup.service.RequestRegistration;
 
 import javax.enterprise.inject.Model;
 import javax.faces.context.FacesContext;
@@ -22,6 +23,14 @@ public class RequestController implements Serializable {
 
     @Inject
     private LoginManager loginManager;
+
+    @Inject
+    private FacesContext facesContext;
+
+    @Inject
+    private RequestRegistration requestRegistration;
+
+    private List<Request> list;
 
     private boolean editing;
     private long editingId;
@@ -73,19 +82,21 @@ public class RequestController implements Serializable {
     private long getRowId() {
         FacesContext context = FacesContext.getCurrentInstance();
         // long id = context.getApplication().evaluateExpressionGet(context, "#{r.id}", Long.class);
-        long id = Long.valueOf(context.getExternalContext().getRequestParameterMap().get("reqId"));
+        long id = Long.valueOf(context.getExternalContext().getRequestParameterMap().get("#{reqId}"));
         LOGGER.debug("id=" + id);
         return id;
     }
 
     public String delete(long id) {
-        Request request = findById(id);
-        requestRepository.remove(request);
+//        Request request = findById(id);
+//        requestRepository.remove(request);
+        requestRegistration.remove(id);
         return "";
     }
 
     public List<Request> getList() {
-        return requestRepository.findAll();
+        list = requestRepository.findAll();
+        return list;
     }
     
     public Request findById(long id) {

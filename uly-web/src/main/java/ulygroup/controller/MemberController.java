@@ -13,8 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 // @Model: this is a request-scoped bean that has anEL name
-//   (see http://sfwk.org/Documentation/WhatIsThePurposeOfTheModelAnnotation)
-//
 @Model
 public class MemberController {
 

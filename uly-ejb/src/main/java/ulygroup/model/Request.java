@@ -98,6 +98,6 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         String userName = (user == null? "null" : user.getLoginName());
-        return String.format("req[id=%d user=%s sum=%d\n", id, userName, sum);
+        return String.format("req[id=%d user=%s sum=%d]\n", id, userName, sum);
     }
 }
