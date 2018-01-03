@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 // The @Stateless annotation eliminates the need for manual transaction demarcation
 @Stateless
-public class RequestRegistration {
+public class RequestService {
 
     @Inject
     private Logger log;

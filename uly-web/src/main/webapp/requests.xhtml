@@ -26,7 +26,7 @@
           <h:column>
             <f:facet name="header">Id</f:facet>
             <h:outputText value="#{r.id}" />
-            <f:param name="reqId" value="#{r.id}"></f:param>
+            <f:param name="reqId" value="#{r.id}"/>
           </h:column>
 
           <!-- User -->
@@ -52,7 +52,7 @@
           <!-- Mod -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['gen.mod']}" /> </f:facet>
-            <h:commandButton value="Mod" rendered="#{r.requested}">
+            <h:commandButton label="#{r.id}" value="Mod" rendered="#{r.requested}">
               <f:ajax listener="#{requestController.modify}" execute="@this" event="click"
                       render="reqForm"/>
             </h:commandButton>

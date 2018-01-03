@@ -4,9 +4,10 @@ import org.jboss.logging.Logger;
 import ulygroup.data.LoginManager;
 import ulygroup.data.RequestRepository;
 import ulygroup.model.Request;
-import ulygroup.service.RequestRegistration;
+import ulygroup.service.RequestService;
 
 import javax.enterprise.inject.Model;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
@@ -28,7 +29,7 @@ public class RequestController implements Serializable {
     private FacesContext facesContext;
 
     @Inject
-    private RequestRegistration requestRegistration;
+    private RequestService requestService;
 
     private List<Request> list;
 
@@ -58,9 +59,11 @@ public class RequestController implements Serializable {
         return "";
     }
 
-    // The [Mod] button has been pressed
+    // The [Mod] button has been pressed; the Id of the Request is put into the label
     public String modify(AjaxBehaviorEvent event) {
-        editingId = getRowId();
+        HtmlCommandButton cb = (HtmlCommandButton) event.getSource();
+        LOGGER.info("##### modify event=" + event + "  label=" + cb.getLabel());
+        editingId = Long.valueOf(cb.getLabel());
         setEditing(true);
         return "";
     }
@@ -79,18 +82,16 @@ public class RequestController implements Serializable {
         return "";
     }
 
-    private long getRowId() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        // long id = context.getApplication().evaluateExpressionGet(context, "#{r.id}", Long.class);
-        long id = Long.valueOf(context.getExternalContext().getRequestParameterMap().get("#{reqId}"));
-        LOGGER.debug("id=" + id);
-        return id;
-    }
+//    private long getRowId() {
+//        FacesContext context = FacesContext.getCurrentInstance();
+////        long id = context.getApplication().evaluateExpressionGet(context, "#{r.id}", Long.class);
+//        long id = Long.valueOf(context.getExternalContext().getRequestParameterMap().get("reqId"));
+//        LOGGER.debug("id=" + id);
+//        return id;
+//    }
 
     public String delete(long id) {
-//        Request request = findById(id);
-//        requestRepository.remove(request);
-        requestRegistration.remove(id);
+        requestService.remove(id);
         return "";
     }
 
@@ -116,4 +117,7 @@ public class RequestController implements Serializable {
 
     public boolean isEditing() { return editing; }
     public void setEditing(boolean editing) { this.editing = editing; }
+
+    public long getEditingId() { return editingId; }
+    public void setEditingId(long editingId) {this.editingId = editingId; }
 }
