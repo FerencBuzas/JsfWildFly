@@ -17,7 +17,7 @@
         <h2><h:outputText value="#{msg['req.title']}" /></h2>
     
         <h:dataTable id="reqTable" 
-                value="#{reqList.list}" var="r"
+                value="#{requestController.list}" var="r"
                 styleClass="feri-table"
                 headerClass="feri-table-header"
                 rowClasses="feri-table-odd-row,feri-table-even-row">
@@ -26,6 +26,7 @@
           <h:column>
             <f:facet name="header">Id</f:facet>
             <h:outputText value="#{r.id}" />
+            <f:param name="reqId" value="#{r.id}"></f:param>
           </h:column>
 
           <!-- User -->
@@ -52,7 +53,7 @@
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['gen.mod']}" /> </f:facet>
             <h:commandButton value="Mod" rendered="#{r.requested}">
-              <f:ajax listener="#{reqList.modify}" execute="@this" event="click"
+              <f:ajax listener="#{requestController.modify}" execute="@this" event="click"
                       render="reqForm"/>
             </h:commandButton>
           </h:column>
@@ -61,7 +62,7 @@
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['gen.del']}" /> </f:facet>
             <h:form>
-              <h:commandButton value="X" action="#{reqList.delete(r.id)}"
+              <h:commandButton value="X" action="#{requestController.delete(r.id)}"
                                rendered="#{r.requested}"/>
             </h:form>
           </h:column>
@@ -72,21 +73,21 @@
 
         <!-- [New] -->
         <h:commandButton value="New" styleClass="left160">
-          <f:ajax listener="#{reqList.newReq}" execute="@this" event="click"
+          <f:ajax listener="#{requestController.newReq}" execute="@this" event="click"
                   render="reqForm"/>
         </h:commandButton>
 
         <!-- form for Mod, New -->
         <h:form id="reqForm">
           <br/>
-          <h:panelGrid id="reqPanelGrid" columns="1" rendered="#{reqList.editing}">
+          <h:panelGrid id="reqPanelGrid" columns="1" rendered="#{requestController.editing}">
 
           <!-- title -->
           
-          <h:outputLabel rendered="#{reqList.editingId==0}" value="New Request" styleClass="feriH3"/>
-          <h:outputLabel rendered="#{reqList.editingId!=0}" value="Modify Request" styleClass="feriH3" />
+          <h:outputLabel rendered="#{requestController.editingId==0}" value="New Request" styleClass="feriH3"/>
+          <h:outputLabel rendered="#{requestController.editingId!=0}" value="Modify Request" styleClass="feriH3" />
 
-          <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{reqList.editing}">
+          <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{requestController.editing}">
 
             <!-- sum -->
             <h:outputLabel for="sumInput" value="Sum:" />
@@ -101,7 +102,7 @@
             <h:commandButton value="Submit" action="#{req.submit()}" />
             
             <!-- [Cancel] -->
-            <h:commandButton value="Cancel" action="#{reqList.setEditing(false)}"
+            <h:commandButton value="Cancel" action="#{requestController.setEditing(false)}"
                              immediate="true" />
 
           </h:panelGrid>

@@ -4,13 +4,13 @@ import org.jboss.logging.Logger;
 import ulygroup.data.UserRepository;
 import ulygroup.model.User;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@ApplicationScoped
+@Model
 public class UserController implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(UserController.class);

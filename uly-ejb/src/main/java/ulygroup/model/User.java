@@ -2,17 +2,18 @@ package ulygroup.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "myuser" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
+@Table(name = "Myuser" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
 public class User {
 
-    public static final String ROLE_ADMIN = "A";
-    public static final String ROLE_USER = "U";
+    public enum Role {Admin, User }
 
     @Id
     @GeneratedValue
@@ -28,13 +29,14 @@ public class User {
     private String password = "";
     
     @NotNull
-    private String role = ROLE_USER;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.User;
     
     
     public User() {
     }
 
-    public User(long id, String name, String loginName, String password, String role) {
+    public User(long id, String name, String loginName, String password, Role role) {
         this.id = id;
         this.name = name;
         this.loginName = loginName;
@@ -77,16 +79,16 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name='" + name + '\'' + ", loginName='" + loginName + '\'' + ", password='" + password + '\'' + ", role='" + role + '\'' + '}';
+        return "User{" + "id=" + id + ", name='" + name + '\'' + ", loginName='" + loginName + '\'' + ", password='" + password + '\'' + ", role='" + role + "'}\n";
     }
 }

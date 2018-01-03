@@ -14,17 +14,20 @@
 
     <class>ulygroup.model.Member</class>
     <class>ulygroup.model.User</class>
+    <class>ulygroup.model.Request</class>
+    <class>ulygroup.model.Eventt</class>
 
     <properties>
 
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/uly" />
-      <property name="javax.persistence.jdbc.user" value="feri" />
-      <property name="javax.persistence.jdbc.password" value="feri" />
+      <property name="javax.persistence.jdbc.user" value="root" />
+      <property name="javax.persistence.jdbc.password" value="Feri" />
 
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
       <property name="hibernate.show_sql" value="true" />
-      <property name="hibernate.hbm2ddl.auto" value="update" />
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
 
     </properties>
   </persistence-unit>

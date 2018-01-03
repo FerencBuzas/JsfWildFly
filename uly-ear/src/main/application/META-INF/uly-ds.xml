@@ -10,8 +10,8 @@
     <connection-url>jdbc:mysql://localhost:3306/uly</connection-url>
     <driver>mysql</driver>
     <security>
-      <user-name>feri</user-name>
-      <password>feri</password>
+      <user-name>root</user-name>
+      <password>Feri</password>
     </security>
   </datasource>
 

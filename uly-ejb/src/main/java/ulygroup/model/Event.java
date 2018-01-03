@@ -2,6 +2,7 @@ package ulygroup.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Column; 
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,6 +23,7 @@ public class Event {
     @ManyToOne
     private User user;
     
+    @Column(name = "event_name")
     private String eventName;
     private boolean success;
 

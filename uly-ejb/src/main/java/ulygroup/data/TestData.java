@@ -17,10 +17,10 @@ public class TestData implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(TestData.class);
     
-    private User feri  = new User(1, "Feri", "feri", "feri", User.ROLE_ADMIN);
-    private User bea   = new User(2, "Bea", "bea", "bea", User.ROLE_USER);
-    private User marci = new User(3, "Marci", "marci", "marci", User.ROLE_USER);
-    
+    private User feri  = new User(1, "Feri", "feri", "feri", User.Role.Admin);
+    private User bea   = new User(2, "Bea", "bea", "bea", User.Role.User);
+    private User marci = new User(3, "Marci", "marci", "marci", User.Role.User);
+
     List<User> createUserTestData() {
 
         LOGGER.debug("createUserTestData()");
@@ -35,12 +35,12 @@ public class TestData implements Serializable {
         LOGGER.debug("createRequestTestData()");
 
         Request[] requests = {
-                new Request(1, feri,  400000, Request.STATE_ACCEPTED),
-                new Request(2, feri,  400000, Request.STATE_REQUESTED),
-                new Request(3, bea,   200000, Request.STATE_ACCEPTED),
-                new Request(4, bea,   200000, Request.STATE_REQUESTED),
-                new Request(5, marci, 100000, Request.STATE_REJECTED),
-                new Request(6, marci, 100000, Request.STATE_REQUESTED)
+                new Request(1, feri,  400000, Request.State.Accepted),
+                new Request(2, feri,  400000, Request.State.Requested),
+                new Request(3, bea,   200000, Request.State.Accepted),
+                new Request(4, bea,   200000, Request.State.Requested),
+                new Request(5, marci, 100000, Request.State.Rejected),
+                new Request(6, marci, 100000, Request.State.Requested)
         };
 
         return new CopyOnWriteArrayList<>(requests);

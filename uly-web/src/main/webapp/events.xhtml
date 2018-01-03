@@ -17,8 +17,8 @@
         <h:outputStylesheet library="css" name="style.css"  />
 
         <h1><h:outputText value="#{msg['events.title']}" /></h1>
-    
-        <h:dataTable value="#{eventList.list}" var="e"
+        
+        <h:dataTable value="#{eventController.list}" var="e"
                      styleClass="feri-table"
                      headerClass="feri-table-header"
                      rowClasses="feri-table-odd-row,feri-table-even-row" >

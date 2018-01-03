@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 
-//@ApplicationScoped
 @Model
 public class LoginController implements Serializable {
 

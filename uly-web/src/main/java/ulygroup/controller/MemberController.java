@@ -2,6 +2,7 @@ package ulygroup.controller;
 
 import ulygroup.model.Member;
 import ulygroup.service.MemberRegistration;
+import ulygroup.util.FeriUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
@@ -38,7 +39,7 @@ public class MemberController {
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful"));
             initNewMember();
         } catch (Exception e) {
-            String errorMessage = getRootErrorMessage(e);
+            String errorMessage = FeriUtil.getRootErrorMessage(e, "Registration error");
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration Unsuccessful");
             facesContext.addMessage(null, m);
         }
@@ -47,27 +48,5 @@ public class MemberController {
     @PostConstruct
     public void initNewMember() {
         newMember = new Member();
-    }
-
-    private String getRootErrorMessage(Exception e) {
-
-        // Default to general error message that registration failed.
-        String errorMessage = "Registration failed. See server log for more information";
-        if (e == null) {
-            // This shouldn't happen, but return the default messages
-            return errorMessage;
-        }
-
-        // Start with the exception and recurse to find the root cause
-        Throwable t = e;
-        while (t != null) {
-
-            // Get the message from the Throwable class instance
-            errorMessage = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-
-        // This is the root cause message
-        return errorMessage;
     }
 }

@@ -23,8 +23,7 @@ public class LoginManager implements Serializable {
         
         LOGGER.info("## login() name=" + loginName);
         
-//        List<User> userList = userRepository.findAll();
-//        LOGGER.info("## userList: " + userList);
+        LOGGER.info("\n\n##### userList: " + userRepository.findAll() + "\n#####\n\n");
         
         currentUser = userRepository.findByLoginName(loginName);
         
@@ -48,7 +47,7 @@ public class LoginManager implements Serializable {
     }
 
     public boolean isAdminLoggedIn() {
-        return currentUser != null && currentUser.getRole().equals(User.ROLE_ADMIN);
+        return currentUser != null && currentUser.getRole() == User.Role.Admin;
     }
 
     public User getCurrentUser() { return currentUser; }

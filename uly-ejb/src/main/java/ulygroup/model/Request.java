@@ -1,10 +1,11 @@
 package ulygroup.model;
 
 import org.jboss.logging.Logger;
-import ulygroup.data.RequestList;
 
-import javax.inject.Inject;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -19,28 +20,25 @@ public class Request implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(Request.class);
     
-    public static final String STATE_REQUESTED = "R";
-    public static final String STATE_ACCEPTED  = "A";
-    public static final String STATE_REJECTED  = "X";
-    
-    @Inject
-    private RequestList requestList;
+    public enum State { Requested, Accepted, Rejected }
     
     @GeneratedValue
     @Id
     private long   id;
     
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class, fetch=FetchType.EAGER)
     private User   user;
     
     private long   sum;
-    private String state;
+    
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     public Request() {
         LOGGER.debug("Request()");
     }
     
-    public Request(long id, User user, long sum, String state) {
+    public Request(long id, User user, long sum, State state) {
         LOGGER.debug(String.format("Request() id=%d user=%s sum=%d", id, user.getLoginName(), sum));
         this.id = id;
         this.user = user;
@@ -51,21 +49,12 @@ public class Request implements Serializable {
     public void submit() {
         LOGGER.debug("submit() sum=" + sum);
 
-        requestList.add(sum);
-        requestList.setEditing(false);
+//        requestRepository.add(sum);
+//        requestRepository.setEditing(false);
     }
 
     // --- getter, setter ---
     
-    // needed for Dependency Injection
-    public RequestList getRequestList() {
-        return requestList;
-    }
-
-    public void setRequestList(RequestList requestList) {
-        this.requestList = requestList;
-    }
-
     public long getId() {
         return id;
     }
@@ -91,24 +80,24 @@ public class Request implements Serializable {
     }
 
     public String getState() {
-        return state;
+        return state.toString();
     }
 
-    public void setState(String state) {
+    public void setState(State state) {
         this.state = state;
     }
-    
+
     public void setAccepted(boolean accepted) {
-        this.state = accepted ? STATE_ACCEPTED : STATE_REJECTED; 
+        this.state = accepted ? State.Accepted : State.Rejected; 
     }
     
-    public boolean isRequested() { return state.equals(STATE_REQUESTED); }
-    public boolean isAccepted() { return state.equals(STATE_ACCEPTED); }
-    public boolean isRejected() { return state.equals(STATE_REJECTED); }
+    public boolean isRequested() { return state == State.Requested; }
+    public boolean isAccepted() { return state == State.Accepted; }
+    public boolean isRejected() { return state == State.Rejected; }
     
     @Override
     public String toString() {
         String userName = (user == null? "null" : user.getLoginName());
-        return String.format("req[id=%d user=%s sum=%d", id, userName, sum);
+        return String.format("req[id=%d user=%s sum=%d\n", id, userName, sum);
     }
 }

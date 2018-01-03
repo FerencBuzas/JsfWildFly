@@ -25,7 +25,7 @@ public class UserRepository {
     }
 
     public User findByLoginName(String loginName) {
-        LOGGER.info("## findByLoginName() " + loginName);
+        LOGGER.info("findByLoginName() " + loginName);
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
@@ -41,7 +41,7 @@ public class UserRepository {
     }
     
     public List<User> findAll() {
-        LOGGER.info("## findAll()");
+        LOGGER.info("findAll()");
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
