@@ -74,16 +74,14 @@ public class RequestController implements Serializable {
     // Admin: Accept one request
     public String accept(long id) {
         LOGGER.debug("accept() id=" + id);
-        Request request = findById(id);
-        request.setAccepted(true);
+        requestService.persistMod(id, r -> r.setAccepted(true) );
         return "";
     }
 
     // Admin: Reject one request
     public String reject(long id) {
         LOGGER.debug("reject() id=" + id);
-        Request request = findById(id);
-        request.setState(Request.State.Rejected);
+        requestService.persistMod(id, r -> r.setAccepted(false) );
         return "";
     }
 
@@ -109,15 +107,8 @@ public class RequestController implements Serializable {
     }
 
     public Object submit() {
-        LOGGER.debug("## submit() ediReq=" + ediReq);
-        if (ediReq.getId() == 0) {
-            requestService.submit(ediReq);
-        }
-        else {
-            Request tmpReq = requestService.findById(ediReq.getId());
-            tmpReq.setSum(ediReq.getSum());
-            requestService.submit(tmpReq);
-        }
+        LOGGER.debug("## persist() ediReq=" + ediReq);
+        requestService.persist(ediReq);
         setEditing(false);
         return "";
     }

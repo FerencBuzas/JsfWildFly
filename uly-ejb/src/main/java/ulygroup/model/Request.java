@@ -46,46 +46,19 @@ public class Request implements Serializable {
         this.state = state;
     }
 
-    public void submit() {
-        LOGGER.debug("submit() sum=" + sum);
-
-//        requestRepository.add(sum);
-//        requestRepository.setEditing(false);
-    }
-
     // --- getter, setter ---
     
-    public long getId() {
-        return id;
-    }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public User getUser() {
-        return user;
-    }
+    public long getSum() {return sum; }
+    public void setSum(long sum) { this.sum = sum; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public long getSum() {
-        return sum;
-    }
-
-    public void setSum(long sum) {
-        this.sum = sum;
-    }
-
-    public String getState() {
-        return state.toString();
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
+    public String getState() { return state.toString(); }
+    public void setState(State state) { this.state = state; }
 
     public void setAccepted(boolean accepted) {
         this.state = accepted ? State.Accepted : State.Rejected; 

@@ -18,7 +18,7 @@
     
         <h:form>
         <h:dataTable id="reqTable" 
-                value="#{reqList.list}" var="r"
+                value="#{requestList}" var="r"
                 styleClass="feri-table"
                 headerClass="feri-table-header"
                 rowClasses="feri-table-odd-row,feri-table-even-row">
@@ -26,19 +26,20 @@
           <!-- Id -->
           <h:column>
             <f:facet name="header">Id</f:facet>
-            <h:outputText value="#{r.id}" />
+            <div align="right"><h:outputText value="#{r.id}" /></div>
+            <f:param name="reqId" value="#{r.id}" />
           </h:column>
 
           <!-- User -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
-            <h:outputText value="#{r.user.name}" />
+            <div align="left"><h:outputText value="#{r.user.name}" /></div>
           </h:column>
 
           <!-- Sum -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
-            <h:outputText value="#{r.sum}" styleClass="feri-sum" />
+            <div align="right"><h:outputText value="#{r.sum}" styleClass="feri-sum" /></div>
           </h:column>
 
           <!-- State -->
@@ -52,14 +53,14 @@
             <!-- Accept -->
             <h:column>
               <f:facet name="header"><h:outputText value="Accept" /> </f:facet>
-              <h:commandButton value="Accept" action="#{reqList.accept(r.id)}"
+              <h:commandButton value="Accept" action="#{requestController.accept(r.id)}"
                                rendered="#{!r.accepted}"/>
             </h:column>
 
             <!-- Reject -->
             <h:column>
               <f:facet name="header"><h:outputText value="Reject" /> </f:facet>
-              <h:commandButton value="Reject" action="#{reqList.reject(r.id)}"
+              <h:commandButton value="Reject" action="#{requestController.reject(r.id)}"
                                rendered="#{!r.accepted}"/>
             </h:column>
 

@@ -14,10 +14,13 @@ import java.util.Date;
 @Table(name = "Event" )
 public class Event {
 
+    enum Name { Request, Accept, Reject, Modify }
+    
     @GeneratedValue
     @Id
     private long id;
 
+    @Column(name = "date")
     private Date date;
     
     @ManyToOne

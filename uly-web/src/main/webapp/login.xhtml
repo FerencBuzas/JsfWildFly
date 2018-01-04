@@ -25,14 +25,14 @@
 
         <h:panelGrid columns="3" cellpadding="5">
 
-          <h:outputLabel for="loginName" value="Login name:" />
+          <h:outputLabel for="loginName" value="#{msg['login.name']}" />
           <h:inputText id="loginName" value="#{loginController.loginName}"
                        required="true" label="Login name">
             <f:validateLength minimum="3" />
           </h:inputText>
           <h:message for="loginName" display="icon" />
 
-          <h:outputLabel for="password" value="Password:" />
+          <h:outputLabel for="password" value="#{msg['login.password']}" />
           <h:inputSecret id="password"
                          value="#{loginController.password}" required="true">
             <f:validateLength minimum="3" />
@@ -42,7 +42,7 @@
         </h:panelGrid>
         <br/>
 
-        <h:commandButton value="Login" update="loginPanel messages"
+        <h:commandButton value="#{msg['login.button']}" update="loginPanel messages"
                          action="#{loginController.login()}" styleClass="left80" />
       </h:form>
       
