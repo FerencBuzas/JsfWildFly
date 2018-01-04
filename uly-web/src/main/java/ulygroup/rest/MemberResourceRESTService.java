@@ -1,5 +1,6 @@
 package ulygroup.rest;
 
+import org.jboss.logging.Logger;
 import ulygroup.data.MemberRepository;
 import ulygroup.model.Member;
 import ulygroup.service.MemberRegistration;
@@ -25,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * JAX-RS Example
@@ -136,7 +136,7 @@ public class MemberResourceRESTService {
      * @return JAX-RS response containing all violations
      */
     private Response.ResponseBuilder createViolationResponse(Set<ConstraintViolation<?>> violations) {
-        log.fine("Validation completed. violations found: " + violations.size());
+        log.debug("Validation completed. violations found: " + violations.size());
 
         Map<String, String> responseObj = new HashMap<>();
 

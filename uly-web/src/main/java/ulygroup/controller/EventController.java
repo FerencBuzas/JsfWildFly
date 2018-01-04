@@ -25,7 +25,7 @@ public class EventController implements Serializable {
     
     public List<Event> getList() {
         list = eventRepository.findAll();
-        LOGGER.info("## getList(): list=" + list);
+        LOGGER.debug("## getList(): list=" + list);
         return list;
     }
     

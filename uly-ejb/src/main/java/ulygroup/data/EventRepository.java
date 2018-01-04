@@ -21,7 +21,7 @@ public class EventRepository {
     }
 
     public List<Event> findAll() {
-        LOGGER.info("findAll()");
+        LOGGER.debug("findAll()");
         
 //        CriteriaBuilder cb = em.getCriteriaBuilder();
 //        CriteriaQuery<Event> criteria = cb.createQuery(Event.class);

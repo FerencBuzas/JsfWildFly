@@ -21,9 +21,9 @@ public class LoginManager implements Serializable {
 
     public boolean login(String loginName, String password) {
         
-        LOGGER.info("## login() name=" + loginName);
+        LOGGER.debug("## login() name=" + loginName);
         
-        LOGGER.info("\n\n##### userList: " + userRepository.findAll() + "\n#####\n\n");
+        LOGGER.debug("\n\n##### userList: " + userRepository.findAll() + "\n#####\n\n");
         
         currentUser = userRepository.findByLoginName(loginName);
         

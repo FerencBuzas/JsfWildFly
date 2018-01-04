@@ -35,7 +35,7 @@ public class Request implements Serializable {
     private State state;
 
     public Request() {
-        LOGGER.debug("Request()");
+        LOGGER.trace("Request()");
     }
     
     public Request(long id, User user, long sum, State state) {

@@ -6,15 +6,18 @@ import ulygroup.data.RequestRepository;
 import ulygroup.model.Request;
 import ulygroup.service.RequestService;
 
-import javax.enterprise.inject.Model;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Produces;
 import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
-import java.util.List;
 
-@Model
+@Named
+@SessionScoped
 public class RequestController implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(RequestController.class);
@@ -23,53 +26,54 @@ public class RequestController implements Serializable {
     private RequestRepository requestRepository;
 
     @Inject
+    private RequestService requestService;
+
+    @Inject
     private LoginManager loginManager;
 
     @Inject
     private FacesContext facesContext;
 
-    @Inject
-    private RequestService requestService;
-
-    private List<Request> list;
-
     private boolean editing;
-    private long editingId;
 
-    public void add(long sum) {
-        LOGGER.debug("add() sum="+sum);
-        
-        Request request;
-        if (editingId == 0) {
-            request = new Request(0, loginManager.getCurrentUser(), sum,  Request.State.Requested);
-        }
-        else {
-            request = findById(editingId);
-            request.setSum(sum);
-            editingId = 0;
-        }
-        requestRepository.persist(request);
+    private Request ediReq;   // the currently edited request
+
+    @Produces
+    @Named
+    public Request getEdiReq() { return ediReq; }
+    
+    @PostConstruct
+    public void initNewMember() {
+        ediReq = new Request(0, loginManager.getCurrentUser(), 0, Request.State.Requested);
     }
 
+    // The [New] button has been pressed
     public String newReq(AjaxBehaviorEvent event) {
         LOGGER.debug("newReq()");
 
+        ediReq.setId(0);
+        ediReq.setState(Request.State.Requested);
+        ediReq.setSum(0);
         setEditing(true);
-        editingId = 0;
         return "";
     }
 
     // The [Mod] button has been pressed; the Id of the Request is put into the label
     public String modify(AjaxBehaviorEvent event) {
+        
         HtmlCommandButton cb = (HtmlCommandButton) event.getSource();
-        LOGGER.info("##### modify event=" + event + "  label=" + cb.getLabel());
-        editingId = Long.valueOf(cb.getLabel());
+        long id = Long.valueOf(cb.getLabel());
+        LOGGER.debug("### modify event=" + event + "  label=" + cb.getLabel() + " id=" + id);
+ 
+        ediReq = requestRepository.findById(id);
         setEditing(true);
+        
         return "";
     }
 
     // Admin: Accept one request
     public String accept(long id) {
+        LOGGER.debug("accept() id=" + id);
         Request request = findById(id);
         request.setAccepted(true);
         return "";
@@ -77,29 +81,18 @@ public class RequestController implements Serializable {
 
     // Admin: Reject one request
     public String reject(long id) {
+        LOGGER.debug("reject() id=" + id);
         Request request = findById(id);
         request.setState(Request.State.Rejected);
         return "";
     }
 
-//    private long getRowId() {
-//        FacesContext context = FacesContext.getCurrentInstance();
-////        long id = context.getApplication().evaluateExpressionGet(context, "#{r.id}", Long.class);
-//        long id = Long.valueOf(context.getExternalContext().getRequestParameterMap().get("reqId"));
-//        LOGGER.debug("id=" + id);
-//        return id;
-//    }
-
     public String delete(long id) {
+        LOGGER.debug("delete() id=" + id);
         requestService.remove(id);
         return "";
     }
 
-    public List<Request> getList() {
-        list = requestRepository.findAll();
-        return list;
-    }
-    
     public Request findById(long id) {
         return requestRepository.findById(id);
     }
@@ -108,16 +101,27 @@ public class RequestController implements Serializable {
     public String acceptAll() {
         LOGGER.debug("acceptAll()");
         
-        LOGGER.info("TODO: acceptAll()");
+        LOGGER.debug("TODO: acceptAll()");
 //        list.stream()
 //                .filter(Request::isRequested)
 //                .forEach(r -> r.setState(Request.State.Accepted));
         return "";
     }
 
+    public Object submit() {
+        LOGGER.debug("## submit() ediReq=" + ediReq);
+        if (ediReq.getId() == 0) {
+            requestService.submit(ediReq);
+        }
+        else {
+            Request tmpReq = requestService.findById(ediReq.getId());
+            tmpReq.setSum(ediReq.getSum());
+            requestService.submit(tmpReq);
+        }
+        setEditing(false);
+        return "";
+    }
+    
     public boolean isEditing() { return editing; }
-    public void setEditing(boolean editing) { this.editing = editing; }
-
-    public long getEditingId() { return editingId; }
-    public void setEditingId(long editingId) {this.editingId = editingId; }
+    public Object setEditing(boolean editing) { this.editing = editing; return ""; }
 }

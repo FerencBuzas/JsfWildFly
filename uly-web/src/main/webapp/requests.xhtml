@@ -17,7 +17,7 @@
         <h2><h:outputText value="#{msg['req.title']}" /></h2>
     
         <h:dataTable id="reqTable" 
-                value="#{requestController.list}" var="r"
+                value="#{requestList}" var="r"
                 styleClass="feri-table"
                 headerClass="feri-table-header"
                 rowClasses="feri-table-odd-row,feri-table-even-row">
@@ -25,20 +25,20 @@
           <!-- Id -->
           <h:column>
             <f:facet name="header">Id</f:facet>
-            <h:outputText value="#{r.id}" />
-            <f:param name="reqId" value="#{r.id}"/>
+            <div align="right"><h:outputText value="#{r.id}" /></div>
+            <f:param name="reqId" value="#{r.id}" />
           </h:column>
 
           <!-- User -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
-            <h:outputText value="#{r.user.name}" />
+            <div align="left"><h:outputText value="#{r.user.name}" /></div>
           </h:column>
 
           <!-- Sum -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
-            <h:outputText value="#{r.sum}" styleClass="feri-sum" />
+            <div align="right"><h:outputText value="#{r.sum}" styleClass="feri-sum" /></div>
           </h:column>
 
           <!-- Status -->
@@ -52,7 +52,7 @@
           <!-- Mod -->
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['gen.mod']}" /> </f:facet>
-            <h:commandButton label="#{r.id}" value="Mod" rendered="#{r.requested}">
+            <h:commandButton value="Mod" label="#{r.id}" rendered="#{r.requested}">
               <f:ajax listener="#{requestController.modify}" execute="@this" event="click"
                       render="reqForm"/>
             </h:commandButton>
@@ -82,30 +82,24 @@
           <br/>
           <h:panelGrid id="reqPanelGrid" columns="1" rendered="#{requestController.editing}">
 
-          <!-- title -->
-          
-          <h:outputLabel rendered="#{requestController.editingId==0}" value="New Request" styleClass="feriH3"/>
-          <h:outputLabel rendered="#{requestController.editingId!=0}" value="Modify Request" styleClass="feriH3" />
+            <h:outputLabel rendered="#{ediReq.id==0}" value="New Request" styleClass="feriH3"/>
+            <h:outputLabel rendered="#{ediReq.id!=0}" value="Modify Request" styleClass="feriH3" />
 
-          <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{requestController.editing}">
+            <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{requestController.editing}">
+              
+              <h:outputLabel for="sumInput" value="Sum:" />
+              <h:inputText id="sumInput" value="#{ediReq.sum}"
+                           required="true" label="Sum">
+                <f:convertNumber integerOnly="true" />
+                <f:validateLongRange minimum="100" maximum="999999999" />
+              </h:inputText>
+              <h:message for="sumInput" display="icon" />
 
-            <!-- sum -->
-            <h:outputLabel for="sumInput" value="Sum:" />
-            <h:inputText id="sumInput" value="#{req.sum}"
-                         required="true" label="Sum">
-              <f:convertNumber integerOnly="true" />
-              <f:validateLongRange minimum="100" maximum="999999999" />
-            </h:inputText>
-            <h:message for="sumInput" display="icon" />
+              <h:commandButton value="Submit" action="#{requestController.submit()}" />
+              <h:commandButton value="Cancel" action="#{requestController.setEditing(false)}"
+                               immediate="true" />
 
-            <!-- [Submit] -->
-            <h:commandButton value="Submit" action="#{req.submit()}" />
-            
-            <!-- [Cancel] -->
-            <h:commandButton value="Cancel" action="#{requestController.setEditing(false)}"
-                             immediate="true" />
-
-          </h:panelGrid>
+            </h:panelGrid>
           </h:panelGrid>
 
         </h:form>

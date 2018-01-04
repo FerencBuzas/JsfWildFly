@@ -1,6 +1,6 @@
 package ulygroup.util;
 
-import java.util.logging.Logger;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
