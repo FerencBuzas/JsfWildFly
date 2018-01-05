@@ -75,25 +75,26 @@
 
 // Requests
 
-.feri-table{   
+.feri-table {   
 	border-collapse:collapse;
+	border-spacing: 8px !important;
 	margin: 15px;
 }
 
-.feri-table-header{
+.feri-table-header {
 	background:none repeat scroll 0 0 #E5E5E5;
 	border-bottom:1px solid #BBBBBB;
 	padding:16px;
 	text-align:center;
 }
 
-.feri-table-odd-row{
+.feri-table-odd-row {
 	background:none repeat scroll 0 0 #FFFFFFF;
 	border-top:1px solid #BBBBBB;
 	text-align:center;
 }
 
-.feri-table-even-row{
+.feri-table-even-row {
 	background:none repeat scroll 0 0 #F9F9F9;
 	border-top:1px solid #BBBBBB;
 	text-align:center;

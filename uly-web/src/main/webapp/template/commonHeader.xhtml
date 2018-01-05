@@ -32,13 +32,14 @@
                              rendered="#{!loginController.loggedIn}"> </h:link> </li>
               </ul>
             </td>
-            <td style="padding: 2px 6px 2px 18px">
-              <h:outputText value="#{loginController.currentUser.loginName}" />
-            </td>
-            <td>
-              <h:form>
-                <h:commandButton value="#{msg['main.logout']}" action="#{loginController.logout()}"
-                                 rendered="#{loginController.loggedIn}"/>
+            <td style="padding: 4px 4px 2px 10px">
+              <h:form id="loginComboForm" rendered="#{loginController.loggedIn}">
+                <h:selectOneMenu value="#{loginController.currentUserName}"
+                                 onchange="submit()"
+                                 valueChangeListener="#{loginController.logout}">
+                  <f:selectItem itemValue="0" itemLabel="#{loginController.currentUserName}" />
+                  <f:selectItem itemValue="1" itemLabel="#{msg['main.logout']}" />
+                </h:selectOneMenu>
               </h:form>
             </td>
             <td>

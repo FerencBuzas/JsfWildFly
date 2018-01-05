@@ -21,14 +21,14 @@ public class LoginManager implements Serializable {
 
     public boolean login(String loginName, String password) {
         
-        LOGGER.debug("## login() name=" + loginName);
+        LOGGER.debug("login() name=" + loginName);
         
-        LOGGER.debug("\n\n##### userList: " + userRepository.findAll() + "\n#####\n\n");
-        
+        LOGGER.debug("  userList: " + userRepository.findAll());
+
         currentUser = userRepository.findByLoginName(loginName);
         
         if (currentUser != null) {
-            LOGGER.debug("login successful for " + loginName);
+            LOGGER.info("login successful for " + loginName);
             return true;
         } 
         else {

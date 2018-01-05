@@ -22,24 +22,21 @@ public class LoginController implements Serializable {
 
     @Inject
     private LoginManager loginManager;
-    
+
     @Inject
     private UserController userController;
-    
+
     private String loginName;
     private String password;
 
     public String login() {
 
         LOGGER.info("login() name=" + loginName + " password=" + password);
-                
+
         if (loginManager.login(loginName, password)) {
             return HOME_PAGE_REDIRECT;
-        } 
-        else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_WARN,
-                    "Login failed", "Invalid or unknown credentials."));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
             return null;
         }
     }
@@ -54,7 +51,7 @@ public class LoginController implements Serializable {
         LOGGER.info("logout successful for " + identifier);
         return LOGOUT_PAGE_REDIRECT;
     }
-    
+
     public boolean isLoggedIn() {
         return loginManager.isLoggedIn();
     }
@@ -74,10 +71,14 @@ public class LoginController implements Serializable {
     public void setPassword(String password) { this.password = password; }
     
     public User getCurrentUser() { return loginManager.getCurrentUser(); }
-
-    // do not provide a setter for currentUser!
-
-    // for DI
-    public UserController getUserController() { return userController; }
-    public void setUserController(UserController userController) { this.userController = userController; }
+    
+    // For JSF
+    public String getCurrentUserName() {
+        User cu = getCurrentUser();
+        return (cu != null ? cu.getLoginName() : "");
+    }
+    // Since the current user and 'logout' are in a combo box whose value can change
+    public void setCurrentUserName(String name) {
+        LOGGER.debug("dummy setCurrentUserName() name=" + name);
+    }
 }
