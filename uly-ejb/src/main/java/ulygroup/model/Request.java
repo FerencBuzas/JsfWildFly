@@ -56,6 +56,7 @@ public class Request implements Serializable {
 
     public long getSum() {return sum; }
     public void setSum(long sum) { this.sum = sum; }
+    public String getSumStr() { return Long.toString(sum); }
 
     public String getState() { return state.toString(); }
     public void setState(State state) { this.state = state; }

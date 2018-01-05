@@ -2,9 +2,9 @@ package ulygroup.service;
 
 import org.jboss.logging.Logger;
 import ulygroup.model.Request;
+import ulygroup.model.Event.Type;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.function.Consumer;
@@ -19,7 +19,7 @@ public class RequestService {
     private EntityManager em;
 
     @Inject
-    private Event<Request> requestEventSrc;
+    private javax.enterprise.event.Event<Request> requestEventSrc;
     
     @Inject
     private EventService eventService;
@@ -32,10 +32,10 @@ public class RequestService {
         
         try {
             em.persist(request);
-            eventService.add("new request: " + request.getSum(), true);
+            eventService.add(Type.Request, request.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add("new request: " + request.getSum(), false);
+            eventService.add(Type.Request, request.getSumStr(), false);
         }
         requestEventSrc.fire(request);  // caught in RequestListProducer
     }
@@ -47,10 +47,10 @@ public class RequestService {
         changeSomeField.accept(tmpReq);
         try {
             em.persist(tmpReq);
-            eventService.add("modify request: " + tmpReq.getSum(), true);
+            eventService.add(Type.Modify, tmpReq.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add("modify request: " + tmpReq.getSum(), false);
+            eventService.add(Type.Modify, tmpReq.getSumStr(), false);
         }         
         requestEventSrc.fire(tmpReq);
     }
@@ -60,10 +60,10 @@ public class RequestService {
         Request r = em.find(Request.class, id);
         try {
             em.remove(r);
-            eventService.add("remove request: " + r.getSum(), true);
+            eventService.add(Type.Delete, r.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add("remove request: " + r.getSum(), false);
+            eventService.add(Type.Delete, r.getSumStr(), false);
         }
         requestEventSrc.fire(r);
     }

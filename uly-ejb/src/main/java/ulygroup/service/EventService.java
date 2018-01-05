@@ -24,9 +24,9 @@ public class EventService {
     @Inject
     private LoginManager loginManager;
 
-    public void add(String eventName, boolean success) {
+    public void add(Event.Type type, String info, boolean success) {
 
-        Event event = new Event(0, new Date(), loginManager.getCurrentUser(), eventName, success);
+        Event event = new Event(0, new Date(), loginManager.getCurrentUser(), type, info, success);
         LOGGER.debug("add(): " + event);
 
         em.persist(event);
@@ -41,7 +41,5 @@ public class EventService {
 
         criteria.select(user).orderBy(cb.asc(user.get("user")));
         return em.createQuery(criteria).getResultList();
-        
-//        return em.createQuery("from Event", Event.class).getResultList();
     }
 }

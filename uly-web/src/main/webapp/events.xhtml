@@ -35,7 +35,12 @@
 
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['events.event']}" /></f:facet>
-            #{e.eventName}
+            #{msg[eventController.getTypeMsgKey(e)]}
+          </h:column>
+
+          <h:column>
+            <f:facet name="header"><h:outputText value="info" /></f:facet>
+            #{e.info}
           </h:column>
 
           <h:column>

@@ -1,8 +1,10 @@
 package ulygroup.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Column; 
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,7 +16,7 @@ import java.util.Date;
 @Table(name = "Event" )
 public class Event {
 
-    enum Name { Request, Accept, Reject, Modify }
+    public enum Type { Request, Accept, Reject, Modify, Delete }
     
     @GeneratedValue
     @Id
@@ -25,19 +27,24 @@ public class Event {
     
     @ManyToOne
     private User user;
-    
-    @Column(name = "event_name")
-    private String eventName;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
+    @Column(name = "info")
+    private String info;
+
     private boolean success;
 
     public Event() {
     }
     
-    public Event(long id, Date date, User user, String eventName, boolean success) {
+    public Event(long id, Date date, User user, Type type, String info, boolean success) {
         this.id = id;
         this.date = date;
         this.user = user;
-        this.eventName = eventName;
+        this.type = type;
+        this.info = info;
         this.success = success;
     }
 
@@ -51,35 +58,18 @@ public class Event {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
-    }
+    public Date getDate() { return date; }
+    public void setDate(Date date) { this.date = date; }
+    
+    public User getUser() { return user;  }
+    public void setUser(User user) { this.user = user; }
+    
+    public Type getType() {return type; }
+    public void setType(Type type) {this.type = type; }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+    public String getInfo() { return info; }
+    public void setInfo(String info) { this.info = info; }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+    public boolean isSuccess() { return success; }
+    public void setSuccess(boolean success) { this.success = success; }
 }
