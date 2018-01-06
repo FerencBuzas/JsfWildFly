@@ -15,42 +15,56 @@
         <h:outputStylesheet library="css" name="style.css"  />
         
         <h2><h:outputText value="#{msg['admin.title']}" /></h2>
-    
+        
         <h:form>
-        <h:dataTable id="reqTable" 
-                value="#{requestList}" var="r"
-                styleClass="feri-table" 
-                cellspacing="6px"
-                headerClass="feri-table-header"
-                rowClasses="feri-table-odd-row,feri-table-even-row">
-          
-          <!-- Id -->
-          <h:column>
-            <f:facet name="header">Id</f:facet>
-            <div align="right"><h:outputText value="#{r.id}" /></div>
-            <f:param name="reqId" value="#{r.id}" />
-          </h:column>
+          <h:selectOneMenu value="#{requestController.filter}"
+                           onchange="submit()"
+                           valueChangeListener="#{requestController.filterChanged}">
+            <f:selectItem itemValue="All" itemLabel="All" />
+            <f:selectItem itemValue="Accepted" itemLabel="Accepted" />
+            <f:selectItem itemValue="Requested" itemLabel="Requested" />
+          </h:selectOneMenu>
+        </h:form>
+        
+        <h:form>
 
-          <!-- User -->
-          <h:column>
-            <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
-            <div align="left"><h:outputText value="#{r.user.name}" /></div>
-          </h:column>
+          <br/>
+          <br/>
 
-          <!-- Sum -->
-          <h:column>
-            <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
-            <div align="right"><h:outputText value="#{r.sum}" styleClass="feri-sum" /></div>
-          </h:column>
+          <h:dataTable id="reqTable"
+                       value="#{requestController.list}" var="r"
+                       styleClass="feri-table"
+                       cellspacing="6px"
+                       headerClass="feri-table-header"
+                       rowClasses="feri-table-odd-row,feri-table-even-row">
 
-          <!-- State -->
-          <h:column>
-            <f:facet name="header"><h:outputText value="#{msg['req.state']}" /> </f:facet>
-            <span class="#{r.rejected ? 'bg-red' : 'bg-white'}">
+            <!-- Id -->
+            <h:column>
+              <f:facet name="header">Id</f:facet>
+              <div align="right"><h:outputText value="#{r.id}" /></div>
+              <f:param name="reqId" value="#{r.id}" />
+            </h:column>
+
+            <!-- User -->
+            <h:column>
+              <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
+              <div align="left"><h:outputText value="#{r.user.name}" /></div>
+            </h:column>
+
+            <!-- Sum -->
+            <h:column>
+              <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
+              <div align="right"><h:outputText value="#{r.sum}" styleClass="feri-sum" /></div>
+            </h:column>
+
+            <!-- State -->
+            <h:column>
+              <f:facet name="header"><h:outputText value="#{msg['req.state']}" /> </f:facet>
+              <span class="#{r.rejected ? 'bg-red' : 'bg-white'}">
               <h:selectBooleanCheckbox value="#{r.accepted}" disabled="true" />
             </span>
-          </h:column>
-          
+            </h:column>
+
             <!-- Accept -->
             <h:column>
               <f:facet name="header"><h:outputText value="Accept" /> </f:facet>
@@ -65,15 +79,15 @@
                                rendered="#{!r.accepted}"/>
             </h:column>
 
-        </h:dataTable>
+          </h:dataTable>
         </h:form>
-        
+
         <br/>
 
         <!-- [Accept all] -->
         <h:form>
-          <h:commandButton value="Accept all" action="#{reqList.acceptAll}"
-                           rendered="#{reqList.countJustRequested() > 0}"
+          <h:commandButton value="Accept all" action="#{reqestList.acceptAll}"
+                           rendered="#{reqestList.countJustRequested() > 0}"
                            styleClass="left160" />
         </h:form>
 

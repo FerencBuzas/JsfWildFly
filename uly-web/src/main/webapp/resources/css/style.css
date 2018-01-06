@@ -15,8 +15,9 @@
 #content{
 	width: 100%;
 	min-height:400px;
-	margin-right:  16px;
-	margin-bottom: 16px;
+	margin-left: 2em;
+	margin-right:  2em;
+	margin-bottom: 2em;
 }
 
 #footer{
@@ -83,8 +84,8 @@
 
 .feri-table-header {
 	background:none repeat scroll 0 0 #E5E5E5;
-	border-bottom:1px solid #BBBBBB;
-	padding:16px;
+	border-bottom: 1px solid #BBBBBB;
+	padding: 8px;
 	text-align:center;
 }
 

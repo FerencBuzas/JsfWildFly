@@ -4,16 +4,15 @@ import org.jboss.logging.Logger;
 import ulygroup.model.Request;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 
-@RequestScoped
-public class RequestListProducer {
+@SessionScoped
+public class RequestListProducer implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(RequestListProducer.class);
     
@@ -22,9 +21,6 @@ public class RequestListProducer {
 
     private List<Request> requestList;
 
-    // @Named provides access via the EL variable name "requestList" in the UI (e.g. Facelets view)
-    @Produces
-    @Named
     public List<Request> getRequestList() {
         LOGGER.trace("getRequestList()");
         return requestList;
@@ -37,7 +33,7 @@ public class RequestListProducer {
 
     @PostConstruct
     public void retrieveAllRequests() {
-        LOGGER.debug("retrieveAllRequests()");
-        requestList = requestRepository.findAll();
+        LOGGER.debug("@PostConstruct: retrieveAllRequests()");
+        requestList = requestRepository.findAll(RequestRepository.Filter.All);
     }
 }

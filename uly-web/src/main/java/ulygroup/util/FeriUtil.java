@@ -1,5 +1,9 @@
 package ulygroup.util;
 
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+
 public class FeriUtil {
 
     public static String getRootErrorMessage(Exception e, String defaultMsg) {
@@ -22,5 +26,15 @@ public class FeriUtil {
 
         // This is the root cause message
         return errorMessage;
+    }
+
+    public static String refreshPage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String viewId = context.getViewRoot().getViewId();
+        ViewHandler handler = context.getApplication().getViewHandler();
+        UIViewRoot root = handler.createView(context, viewId);
+        root.setViewId(viewId);
+        context.setViewRoot(root);
+        return null;
     }
 }

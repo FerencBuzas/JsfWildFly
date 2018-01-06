@@ -17,7 +17,7 @@
         <h2><h:outputText value="#{msg['req.title']}" /></h2>
     
         <h:dataTable id="reqTable" 
-                value="#{requestList}" var="r"
+                value="#{requestRepository.list}" var="r"
                 styleClass="feri-table"
                 cellspacing="6px"     
                 headerClass="feri-table-header"

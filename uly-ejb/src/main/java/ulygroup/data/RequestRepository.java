@@ -17,6 +17,8 @@ public class RequestRepository implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(RequestRepository.class);
 
+    public enum Filter { Requested, Accepted, All }
+
     private List<Request> list;
 
     public RequestRepository() {
@@ -31,19 +33,28 @@ public class RequestRepository implements Serializable {
         return em.find(Request.class, id);
     }
 
-    public List<Request> findAll() {
+    public List<Request> findAll(Filter filter) {
         LOGGER.debug("findAll()");
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Request> criteria = cb.createQuery(Request.class);
         Root<Request> request = criteria.from(Request.class);
-
+        
         criteria.select(request).orderBy(cb.asc(request.get("user")));
+
+        if (filter == Filter.Accepted) {
+            criteria.where(cb.equal(request.get("state"), Request.State.Accepted));
+//            ParameterExpression<Request.State> p = cb.parameter(Request.State.class, );
+//            criteria.add(cb.equal(emp.get("name"), p));
+        }
+        
+        else if (filter == Filter.Requested) {
+            criteria.where(cb.equal(request.get("state"), Request.State.Requested));
+        }
         list = em.createQuery(criteria).getResultList();
         
-        list = em.createQuery("from Request", ulygroup.model.Request.class).getResultList();
-        LOGGER.debug("findAll() \n## list: " + list);
-        
+        LOGGER.debug("  end of findAll \n## list: " + list);
+
         return list;
     }
 

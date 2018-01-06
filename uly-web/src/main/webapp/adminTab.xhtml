@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<ui:include>
+
+  <h:form>
+    
+    <h:dataTable id="reqTable"
+                 value="#{requestList}" var="r"
+                 styleClass="feri-table"
+                 cellspacing="6px"
+                 headerClass="feri-table-header"
+                 rowClasses="feri-table-odd-row,feri-table-even-row">
+
+      <!-- Id -->
+      <h:column>
+        <f:facet name="header">Id</f:facet>
+        <div align="right"><h:outputText value="#{r.id}" /></div>
+        <f:param name="reqId" value="#{r.id}" />
+      </h:column>
+
+      <!-- User -->
+      <h:column>
+        <f:facet name="header"><h:outputText value="#{msg['req.user']}" /> </f:facet>
+        <div align="left"><h:outputText value="#{r.user.name}" /></div>
+      </h:column>
+
+      <!-- Sum -->
+      <h:column>
+        <f:facet name="header"><h:outputText value="#{msg['req.sum']}" /> </f:facet>
+        <div align="right"><h:outputText value="#{r.sum}" styleClass="feri-sum" /></div>
+      </h:column>
+
+      <!-- State -->
+      <h:column>
+        <f:facet name="header"><h:outputText value="#{msg['req.state']}" /> </f:facet>
+        <span class="#{r.rejected ? 'bg-red' : 'bg-white'}">
+                <h:selectBooleanCheckbox value="#{r.accepted}" disabled="true" />
+              </span>
+      </h:column>
+
+      <!-- Accept -->
+      <h:column>
+        <f:facet name="header"><h:outputText value="Accept" /> </f:facet>
+        <h:commandButton value="Accept" action="#{requestController.accept(r.id)}"
+                         rendered="#{!r.accepted}"/>
+      </h:column>
+
+      <!-- Reject -->
+      <h:column>
+        <f:facet name="header"><h:outputText value="Reject" /> </f:facet>
+        <h:commandButton value="Reject" action="#{requestController.reject(r.id)}"
+                         rendered="#{!r.accepted}"/>
+      </h:column>
+
+    </h:dataTable>
+  </h:form>
+</ui:include>
