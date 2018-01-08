@@ -13,7 +13,10 @@
   <ui:composition template="/template/commonLayout.xhtml">
 
     <ui:define name="content">
-        <h:outputText value="#{msg['main.content']}" escape="false" />
+      <h:outputText value="#{msg['main.content']}" escape="false" />
+      <br/><br/>
+      <h:link value="#{msg['main.login']}" outcome="login.xhtml"
+              rendered="#{!loginController.loggedIn}"> </h:link>
     </ui:define>
 
   </ui:composition>

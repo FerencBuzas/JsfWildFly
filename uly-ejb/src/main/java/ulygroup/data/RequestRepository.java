@@ -12,6 +12,9 @@ import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Selects requests (one or filtered or all).
+ */
 @ApplicationScoped
 public class RequestRepository implements Serializable {
     
@@ -44,8 +47,6 @@ public class RequestRepository implements Serializable {
 
         if (filter == Filter.Accepted) {
             criteria.where(cb.equal(request.get("state"), Request.State.Accepted));
-//            ParameterExpression<Request.State> p = cb.parameter(Request.State.class, );
-//            criteria.add(cb.equal(emp.get("name"), p));
         }
         
         else if (filter == Filter.Requested) {
@@ -56,15 +57,5 @@ public class RequestRepository implements Serializable {
         LOGGER.debug("  end of findAll \n## list: " + list);
 
         return list;
-    }
-
-    public void remove(Request request) {
-        LOGGER.debug("remove() " + request);
-        em.remove(request);
-    }
-
-    public void persist(Request request) {
-        LOGGER.debug("persist() " + request);
-        em.persist(request);
     }
 }

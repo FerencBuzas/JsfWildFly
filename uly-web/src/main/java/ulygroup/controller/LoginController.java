@@ -8,6 +8,7 @@ import javax.enterprise.inject.Model;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.io.Serializable;
 
 @Model
@@ -47,6 +48,12 @@ public class LoginController implements Serializable {
 
         LOGGER.debug("invalidating session for " + identifier);
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+        } catch (IOException e) {
+            LOGGER.info("Could not redirect to index.xhtml");
+        }
 
         LOGGER.info("logout successful for " + identifier);
         return LOGOUT_PAGE_REDIRECT;

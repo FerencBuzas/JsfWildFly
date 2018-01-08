@@ -15,7 +15,7 @@
     <class>ulygroup.model.Member</class>
     <class>ulygroup.model.User</class>
     <class>ulygroup.model.Request</class>
-    <class>ulygroup.model.Eventt</class>
+    <class>ulygroup.model.Event</class>
 
     <properties>
 

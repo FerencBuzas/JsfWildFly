@@ -110,14 +110,14 @@ public class RequestController implements Serializable {
     // The admin user has pressed 'Accept all'; accept those not accepted.
     public String acceptAll() {
         LOGGER.debug("acceptAll()");
-        
-        LOGGER.debug("TODO: acceptAll()");
-//        list.stream()
-//                .filter(Request::isRequested)
-//                .forEach(r -> r.setState(Request.State.Accepted));
+        requestService.acceptAll();
         return "";
     }
 
+    public int countJustRequested() {
+        return 1;
+    } 
+    
     public Object submit() {
         LOGGER.debug("## persist() ediReq=" + ediReq);
         requestService.persist(ediReq);

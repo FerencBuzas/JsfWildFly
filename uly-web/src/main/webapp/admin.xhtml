@@ -17,13 +17,13 @@
         <h2><h:outputText value="#{msg['admin.title']}" /></h2>
         
         <h:form>
-          <h:selectOneMenu value="#{requestController.filter}"
-                           onchange="submit()"
-                           valueChangeListener="#{requestController.filterChanged}">
-            <f:selectItem itemValue="All" itemLabel="All" />
-            <f:selectItem itemValue="Accepted" itemLabel="Accepted" />
-            <f:selectItem itemValue="Requested" itemLabel="Requested" />
-          </h:selectOneMenu>
+          <h:selectOneRadio value="#{requestController.filter}"
+                            onchange="submit()"
+                            valueChangeListener="#{requestController.filterChanged}">
+            <f:selectItem itemValue="All" itemLabel="#{msg['admin.show.all']}" />
+            <f:selectItem itemValue="Accepted" itemLabel="#{msg['admin.show.accepted']}" />
+            <f:selectItem itemValue="Requested" itemLabel="#{msg['admin.show.requested']}" />
+          </h:selectOneRadio>
         </h:form>
         
         <h:form>
@@ -67,15 +67,15 @@
 
             <!-- Accept -->
             <h:column>
-              <f:facet name="header"><h:outputText value="Accept" /> </f:facet>
-              <h:commandButton value="Accept" action="#{requestController.accept(r.id)}"
+              <f:facet name="header"><h:outputText value="#{msg['admin.accept']}" /> </f:facet>
+              <h:commandButton value="#{msg['admin.accept']}" action="#{requestController.accept(r.id)}"
                                rendered="#{!r.accepted}"/>
             </h:column>
 
             <!-- Reject -->
             <h:column>
-              <f:facet name="header"><h:outputText value="Reject" /> </f:facet>
-              <h:commandButton value="Reject" action="#{requestController.reject(r.id)}"
+              <f:facet name="header"><h:outputText value="#{msg['admin.reject']}" /> </f:facet>
+              <h:commandButton value="#{msg['admin.reject']}" action="#{requestController.reject(r.id)}"
                                rendered="#{!r.accepted}"/>
             </h:column>
 
@@ -86,8 +86,8 @@
 
         <!-- [Accept all] -->
         <h:form>
-          <h:commandButton value="Accept all" action="#{reqestList.acceptAll}"
-                           rendered="#{reqestList.countJustRequested() > 0}"
+          <h:commandButton value="#{msg['admin.acceptAll']}" action="#{requestController.acceptAll}"
+                           rendered="#{requestController.countJustRequested() > 0}"
                            styleClass="left160" />
         </h:form>
 
