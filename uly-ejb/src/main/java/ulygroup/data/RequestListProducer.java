@@ -2,6 +2,7 @@ package ulygroup.data;
 
 import org.jboss.logging.Logger;
 import ulygroup.model.Request;
+import ulygroup.model.User;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -19,6 +20,9 @@ public class RequestListProducer implements Serializable {
     @Inject
     private RequestRepository requestRepository;
 
+    @Inject
+    private LoginManager loginManager;
+    
     private List<Request> requestList;
 
     public List<Request> getRequestList() {
@@ -26,14 +30,16 @@ public class RequestListProducer implements Serializable {
         return requestList;
     }
 
+    // Thought to be called after fire() in RequestService
     public void onRequestListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Request request) {
         LOGGER.debug("onRequestListChanged()");
         retrieveAllRequests();
     }
-
+    
     @PostConstruct
     public void retrieveAllRequests() {
         LOGGER.debug("@PostConstruct: retrieveAllRequests()");
-        requestList = requestRepository.findAll(RequestRepository.Filter.All);
+        User filterUser = loginManager.isAdminLoggedIn() ? null : loginManager.getCurrentUser();
+        requestList = requestRepository.findAll(RequestRepository.Filter.All, filterUser);
     }
 }

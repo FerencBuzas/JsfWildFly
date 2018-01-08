@@ -64,7 +64,7 @@ public class RequestService {
     public void acceptAll() {
         LOGGER.debug("acceptAll()");
 
-        List<Request> reqList = requestRepository.findAll(RequestRepository.Filter.Requested);
+        List<Request> reqList = requestRepository.findAll(RequestRepository.Filter.Requested, null);
 
         reqList.forEach(r -> {
             r.setState(Request.State.Accepted);

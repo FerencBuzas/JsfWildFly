@@ -5,6 +5,7 @@ import ulygroup.data.LoginManager;
 import ulygroup.data.RequestRepository;
 import ulygroup.data.RequestRepository.Filter;
 import ulygroup.model.Request;
+import ulygroup.model.User;
 import ulygroup.service.RequestService;
 import ulygroup.util.FeriUtil;
 
@@ -55,7 +56,8 @@ public class RequestController implements Serializable {
     public void initNewMember() {
         LOGGER.debug("@PostConstruct");
         ediReq = new Request(0, loginManager.getCurrentUser(), 0, Request.State.Requested);
-        list = requestRepository.findAll(filter);
+        User filterUser = loginManager.isAdminLoggedIn() ? null : loginManager.getCurrentUser();
+        list = requestRepository.findAll(filter, filterUser);
     }
 
     // The [New] button has been pressed
@@ -124,6 +126,7 @@ public class RequestController implements Serializable {
         return setEditing(false);
     }
     
+    // Admin only: selected whether to see All, Accepted or Requested
     public void filterChanged(ValueChangeEvent event) {
         if (event.getPhaseId() != PhaseId.INVOKE_APPLICATION) {
             LOGGER.debug("  [filterChanged(): passing event to INVOKE_APPLICATION phase]");
@@ -133,7 +136,7 @@ public class RequestController implements Serializable {
         }
 
         LOGGER.debug("filterChanged() filter=" + filter);
-        list = requestRepository.findAll(filter);
+        list = requestRepository.findAll(filter, null);   // admin can see all
 
         FeriUtil.refreshPage();
     }

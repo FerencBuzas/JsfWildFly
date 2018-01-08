@@ -2,14 +2,17 @@ package ulygroup.data;
 
 import org.jboss.logging.Logger;
 import ulygroup.model.Request;
+import ulygroup.model.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,22 +39,36 @@ public class RequestRepository implements Serializable {
         return em.find(Request.class, id);
     }
 
-    public List<Request> findAll(Filter filter) {
-        LOGGER.debug("findAll()");
+    /**
+     * Get requests, depending on the given parameters.
+     * @param filter   Admin users can set whether to see all/accepted/requested only.
+     * @param user     If not null, get only items of the given user. If null, all users.
+     * @return         the items matching the given criteria.
+     */
+    public List<Request> findAll(Filter filter, User user) {
+        LOGGER.debug("findAll() filter=" + filter + ", user=" + user);
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Request> criteria = cb.createQuery(Request.class);
         Root<Request> request = criteria.from(Request.class);
-        
-        criteria.select(request).orderBy(cb.asc(request.get("user")));
 
+        // Create Where conditions
+        List<Predicate> predicates = new ArrayList<>();
         if (filter == Filter.Accepted) {
-            criteria.where(cb.equal(request.get("state"), Request.State.Accepted));
+            predicates.add(cb.equal(request.get("state"), Request.State.Accepted));
         }
+        if (filter == Filter.Requested) {
+            predicates.add(cb.equal(request.get("state"), Request.State.Requested));
+        }
+        if (user != null) {
+            predicates.add(cb.equal(request.get("user"), user));
+        }
+        Predicate[] predArray = predicates.toArray(new Predicate[predicates.size()]);
         
-        else if (filter == Filter.Requested) {
-            criteria.where(cb.equal(request.get("state"), Request.State.Requested));
-        }
+        criteria.select(request)
+                .where(predArray)
+                .orderBy(cb.asc(request.get("user")));
+
         list = em.createQuery(criteria).getResultList();
         
         LOGGER.debug("  end of findAll \n## list: " + list);

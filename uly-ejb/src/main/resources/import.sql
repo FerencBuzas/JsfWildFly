@@ -9,7 +9,7 @@ TRUNCATE TABLE Myuser;
 -- The required 3-3 users
 INSERT INTO Myuser (id, name, login_name, password, role) VALUES (1, 'Buzas Feri',  'feri',   'feri',  'Admin');
 INSERT INTO Myuser (id, name, login_name, password, role) VALUES (2, 'Admin 2',     'admin2', 'bea',   'Admin');
-INSERT INTO Myuser (id, name, login_name, password, role) VALUES (3, 'Admin 3',     'admin2', 'bea',   'Admin');
+INSERT INTO Myuser (id, name, login_name, password, role) VALUES (3, 'Admin 3',     'admin3', 'bea',   'Admin');
 INSERT INTO Myuser (id, name, login_name, password, role) VALUES (4, 'Buzas Bea',   'bea',    'bea',   'User');
 INSERT INTO Myuser (id, name, login_name, password, role) VALUES (5, 'Buzas Marci', 'marci',  'marci', 'User');
 INSERT INTO Myuser (id, name, login_name, password, role) VALUES (6, 'Guest user',  'guest',  'guest', 'User');
