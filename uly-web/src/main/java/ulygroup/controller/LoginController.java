@@ -50,7 +50,7 @@ public class LoginController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect("index.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(LOGOUT_PAGE_REDIRECT);
         } catch (IOException e) {
             LOGGER.info("Could not redirect to index.xhtml");
         }

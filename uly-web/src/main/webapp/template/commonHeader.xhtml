@@ -13,8 +13,7 @@
           <tr>
             <td>
               <ul id="menu">
-                <li> <h:link value="#{msg['main.main']}" outcome="index.xhtml" 
-                             rendered="#{loginController.loggedIn}"> </h:link> </li>
+                <li> <h:link value="#{msg['main.main']}" outcome="index.xhtml"> </h:link> </li>
                 
                 <li> <h:link value="#{msg['main.requests']}" outcome="requests.xhtml"
                              rendered="#{loginController.loggedIn}"> </h:link> </li>
@@ -26,7 +25,7 @@
                              rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
                 
                 <li> <h:link value="#{msg['main.users']}" outcome="users.xhtml"
-                             rendered="#{loginController.loggedIn}"> </h:link> </li>
+                             rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
 
                 <li> <h:link value="#{msg['main.login']}" outcome="login.xhtml"
                              rendered="#{!loginController.loggedIn}"> </h:link> </li>
