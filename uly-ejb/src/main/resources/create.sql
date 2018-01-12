@@ -4,27 +4,29 @@ DROP DATABASE IF EXISTS uly;
 
 CREATE DATABASE uly;
 
-CREATE USER IF NOT EXISTS feri IDENTIFIED BY 'feri';
-CREATE USER IF NOT EXISTS bea IDENTIFIED BY 'bea';
-CREATE USER IF NOT EXISTS marci IDENTIFIED BY 'marci';
-
 USE uly;
-
-GRANT ALL ON uly TO feri;
-GRANT ALL ON uly TO bea;
-GRANT ALL ON uly TO marci;
 
 -- -------------------------------------
 
+-- used only for JAAS
+CREATE TABLE `Roles` (
+  `PrincipalID` varchar(255) NOT NULL,
+  `Role`        varchar(255) NOT NULL,
+  `RoleGroup`   varchar(255) NOT NULL,
+  PRIMARY KEY (`PrincipalID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- both for JAAS and the application
 CREATE TABLE `Myuser` (
   `id`         bigint(20) NOT NULL,
   `login_name` varchar(255) DEFAULT NULL,
   `name`       varchar(255) NOT NULL,
   `password`   varchar(255) NOT NULL,
-  `role`       varchar(255) NOT NULL,
+  `role`        varchar(255) NOT NULL,      -- TODO: redundant
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- for the app only
 CREATE TABLE `Event` (
   `id`         bigint(20) NOT NULL,
   `date`       datetime DEFAULT NULL,
@@ -38,6 +40,7 @@ CREATE TABLE `Event` (
   CONSTRAINT `FK_ev_user_id` FOREIGN KEY (`user_id`) REFERENCES `Myuser` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- for the app only
 CREATE TABLE `Request` (
   `id`         bigint(20) NOT NULL,
   `state`      varchar(255) DEFAULT NULL,

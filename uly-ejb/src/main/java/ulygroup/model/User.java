@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Myuser" /*, uniqueConstraints = @UniqueConstraint(columnNames = "email")*/ )
+@Table(name = "Myuser")
 public class User {
 
     public enum Role {Admin, User }
@@ -31,7 +31,6 @@ public class User {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role = Role.User;
-    
     
     public User() {
     }

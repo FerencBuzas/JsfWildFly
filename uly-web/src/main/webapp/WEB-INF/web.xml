@@ -6,28 +6,25 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>protected</web-resource-name>
-            <url-pattern>/protected/*</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
+            <url-pattern>protected/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>admin</role-name>
-            <role-name>user</role-name>
+            <role-name>Admin</role-name>
+            <role-name>User</role-name>
         </auth-constraint>
     </security-constraint>
   
     <login-config>
-        <auth-method>FORM</auth-method>
-        <realm-name>Application Realm</realm-name>
+        <auth-method>BASIC</auth-method>
         <form-login-config>
-            <form-login-page>/login.xhtml</form-login-page>
+            <form-login-page>/login.xhtml</form-login-page>        <!-- this is working -->
             <form-error-page>/loginError.xhtml</form-error-page>
         </form-login-config>
     </login-config>
   
     <security-role>
-        <role-name>admin</role-name>
-        <role-name>user</role-name>
+        <role-name>Admin</role-name>
+        <role-name>User</role-name>
     </security-role>
   
     <!-- Do not generate comments to HTML output -->

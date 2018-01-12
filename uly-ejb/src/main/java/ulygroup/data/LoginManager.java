@@ -7,6 +7,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 
+/**
+ * Keep info about the currently logged-in user.
+ * TODO: app scoped, not good for multiple users.
+ */
 @ApplicationScoped
 public class LoginManager implements Serializable {
 
@@ -51,5 +55,4 @@ public class LoginManager implements Serializable {
     }
 
     public User getCurrentUser() { return currentUser; }
-    public void setCurrentUser(User currentUser) { this.currentUser = currentUser; }
 }

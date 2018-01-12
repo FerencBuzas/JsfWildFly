@@ -4,17 +4,25 @@ import org.jboss.logging.Logger;
 import ulygroup.data.LoginManager;
 import ulygroup.model.User;
 
-import javax.enterprise.inject.Model;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 
-@Model
+@Named("loginController")
+@ManagedBean
+@Singleton    // TODO: make it multiuser
 public class LoginController implements Serializable {
 
-    private static final long serialVersionUID = -9107952969237527819L;
+    private static final long serialVersionUID = -2879890213L;
 
     private static final Logger LOGGER = Logger.getLogger(LoginController.class);
 
@@ -24,33 +32,64 @@ public class LoginController implements Serializable {
     @Inject
     private LoginManager loginManager;
 
-    @Inject
-    private UserController userController;
+    private User ediUser;
+    
+    public User getEdiUser() { return ediUser; }
 
-    private String loginName;
-    private String password;
-
-    public String login() {
-
-        LOGGER.info("login() name=" + loginName + " password=" + password);
-
-        if (loginManager.login(loginName, password)) {
-            return HOME_PAGE_REDIRECT;
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
-            return null;
+    @PostConstruct
+    public void initNewMember() {
+        if (ediUser == null) {
+            LOGGER.info("@PostConstruct, creating ediUser");
+            ediUser = new User(0, null, null, null, User.Role.User);
         }
     }
 
+    public String login() {
+
+        LOGGER.info("################################################");
+        LOGGER.info("login() name=" + ediUser.getLoginName() + " password=" + ediUser.getPassword());
+        LOGGER.info("################################################");
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+       
+        try {
+            request.login(ediUser.getLoginName(), ediUser.getPassword());
+            LOGGER.info("## Survived request.login, redirecting to " + HOME_PAGE_REDIRECT);
+            return HOME_PAGE_REDIRECT;
+        
+        }
+        catch (ServletException e) {
+            LOGGER.info("### login failed :(");
+            context.addMessage("Ajaj", new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
+            return null;
+        }
+        
+//        if (loginManager.login(loginName, password)) {
+//            return HOME_PAGE_REDIRECT;
+//        } else {
+//            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
+//            return null;
+//        }
+    }
+
     public String logout() {
-        String identifier = loginName;
-        loginManager.logout();
+        String identifier = ediUser.getLoginName();
 
         LOGGER.debug("invalidating session for " + identifier);
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        try {
+            request.logout();
+        } catch (ServletException e) {
+            LOGGER.info("logout() error");
+        }
+        externalContext.invalidateSession();
 
         try {
-            FacesContext.getCurrentInstance().getExternalContext().redirect(LOGOUT_PAGE_REDIRECT);
+            externalContext.redirect(LOGOUT_PAGE_REDIRECT);
         } catch (IOException e) {
             LOGGER.info("Could not redirect to index.xhtml");
         }
@@ -71,16 +110,11 @@ public class LoginController implements Serializable {
         return isLoggedIn() ? HOME_PAGE_REDIRECT : null;
     }
 
-    public String getLoginName() { return loginName; }
-    public void setLoginName(String loginName) { this.loginName = loginName; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-    
     public User getCurrentUser() { return loginManager.getCurrentUser(); }
     
     // For JSF
     public String getCurrentUserName() {
+        LOGGER.info("#### getCurrentUserName ");
         User cu = getCurrentUser();
         return (cu != null ? cu.getLoginName() : "");
     }

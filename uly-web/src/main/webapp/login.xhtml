@@ -20,32 +20,38 @@
 
       <h2 styleClass="left80"><h:outputText value="#{msg['login.title']}" /></h2>
       
-      <h:form>
-        <h:messages id="messages" showDetail="false" />
+      <!-- Either using j_... constants or using a managed Bean is possible,
+        see https://docs.oracle.com/javaee/6/tutorial/doc/glxce.html -->
+      
+      <h:form id="loginForm">
+        <h:messages id="messages" showDetail="true" />
 
         <h:panelGrid columns="3" cellpadding="5">
 
-          <h:outputLabel for="loginName" value="#{msg['login.name']}" />
-          <h:inputText id="loginName" value="#{loginController.loginName}"
-                       required="true" label="Login name">
+          <h:outputLabel for="usernameInput" value="#{msg['login.name']}" />
+          <h:inputText id="usernameInput" value="#{loginController.ediUser.loginName}"
+                       required="true">
             <f:validateLength minimum="3" />
           </h:inputText>
-          <h:message for="loginName" display="icon" />
+          <h:message for="usernameInput" display="icon" />
 
-          <h:outputLabel for="password" value="#{msg['login.password']}" />
-          <h:inputSecret id="password"
-                         value="#{loginController.password}" required="true">
+          <h:outputLabel for="passwordInput" value="#{msg['login.password']}" />
+          <h:inputSecret id="passwordInput"  value="#{loginController.ediUser.password}" 
+                         required="true">
             <f:validateLength minimum="3" />
           </h:inputSecret>
-          <h:message for="password" display="icon" />
+          <h:message for="passwordInput" display="icon" />
 
         </h:panelGrid>
         <br/>
+        
+        <h:commandButton id="loginButton" action="#{loginController.login}"
+                         value="#{msg['login.button']}" styleClass="left80">
+        </h:commandButton>
 
-        <h:commandButton value="#{msg['login.button']}" update="loginPanel messages"
-                         action="#{loginController.login()}" styleClass="left80" />
+
       </h:form>
-      
+
     </ui:define>
   </ui:composition>
 </h:body>

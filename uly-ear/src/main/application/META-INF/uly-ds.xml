@@ -7,7 +7,7 @@
   <datasource jndi-name="java:jboss/datasources/UlyDS" pool-name="UlyDS"
               enabled="true" use-java-context="true">
     
-    <connection-url>jdbc:mysql://localhost:3306/uly</connection-url>
+    <connection-url>jdbc:mysql://localhost:3306/uly</connection-url>   <!-- tested, needed -->
     <driver>mysql</driver>
     <security>
       <user-name>root</user-name>
