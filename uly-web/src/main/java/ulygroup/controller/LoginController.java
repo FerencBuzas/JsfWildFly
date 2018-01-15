@@ -46,22 +46,20 @@ public class LoginController implements Serializable {
 
     public String login() {
 
-        LOGGER.info("################################################");
-        LOGGER.info("login() name=" + ediUser.getLoginName() + " password=" + ediUser.getPassword());
-        LOGGER.info("################################################");
+        LOGGER.info("## login() name=" + ediUser.getLoginName() + " password=" + ediUser.getPassword());
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-       
+        LOGGER.info("## request authType="+request.getAuthType() + " userPrincipal: "+request.getUserPrincipal());
+        
         try {
             request.login(ediUser.getLoginName(), ediUser.getPassword());
             LOGGER.info("## Survived request.login, redirecting to " + HOME_PAGE_REDIRECT);
             return HOME_PAGE_REDIRECT;
-        
         }
         catch (ServletException e) {
-            LOGGER.info("### login failed :(");
-            context.addMessage("Ajaj", new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
+            LOGGER.info("## login failed :(");
+            context.addMessage("Ajaj", new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", e.toString()));
             return null;
         }
         

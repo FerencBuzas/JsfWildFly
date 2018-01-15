@@ -5,7 +5,7 @@
   <!-- DS is bound into JNDI. We ref. this in META-INF/persistence.xml. -->
 
   <datasource jndi-name="java:jboss/datasources/UlyDS" pool-name="UlyDS"
-              enabled="true" use-java-context="true">
+              enabled="true" use-ccm="true">
     
     <connection-url>jdbc:mysql://localhost:3306/uly</connection-url>   <!-- tested, needed -->
     <driver>mysql</driver>

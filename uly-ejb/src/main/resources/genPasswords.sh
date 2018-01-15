@@ -3,6 +3,8 @@
 #
 # This script has been used to generate passwords for the test users.
 # Not necessary to run it, since the scrambled words have been hardcoded into the create.sql .
+# Moreover, I cannot configure WildFly correctly with scrambled passwords.
+#   So I use plain text.
 #
 
 function error_exit() {
@@ -18,7 +20,7 @@ function genOne() {
   login_name="$2"
   name="$3"
   role="$4"
-  gen=$(java -cp picketbox-5.0.2.Final.jar org.jboss.security.Base64Encoder "$login_name" 'SH-256')
+  gen=$(java -cp picketbox-5.0.2.Final.jar org.jboss.security.Base64Encoder "$login_name" 'SHA-256')
 
   echo "INSERT INTO Myuser(id, name, login_name, password, role) VALUES"
   echo "  ($id, '$name', '$login_name', '$gen', '$role');"
