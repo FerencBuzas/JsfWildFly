@@ -4,6 +4,7 @@ import org.jboss.logging.Logger;
 import ulygroup.model.Request;
 import ulygroup.model.User;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -27,12 +28,13 @@ public class RequestRepository implements Serializable {
 
     private List<Request> list;
 
-    public RequestRepository() {
-        LOGGER.debug("RequestRepository()");
-    }
-
     @Inject
     private EntityManager em;
+
+    @PostConstruct
+    public void postConstruct() {
+        LOGGER.debug("postConstruct");
+    }
 
     public Request findById(Long id) {
         LOGGER.debug("findById() id=" + id);
@@ -43,10 +45,11 @@ public class RequestRepository implements Serializable {
      * Get requests, depending on the given parameters.
      * @param filter   Admin users can set whether to see all/accepted/requested only.
      * @param user     If not null, get only items of the given user. If null, all users.
+     * @param from     Log message to see, where it has been called from
      * @return         the items matching the given criteria.
      */
-    public List<Request> findAll(Filter filter, User user) {
-        LOGGER.debug("findAll() filter=" + filter + ", user=" + user);
+    public List<Request> findAll(Filter filter, User user, String from) {
+        LOGGER.debug("findAll()  filter=" + filter + ", user=" + user + ", from=" + from);
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Request> criteria = cb.createQuery(Request.class);

@@ -4,35 +4,27 @@ import org.jboss.logging.Logger;
 import ulygroup.data.UserRepository;
 import ulygroup.model.User;
 
-import javax.enterprise.inject.Model;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-@Model
+
+@Named("userController")
+@SessionScoped
 public class UserController implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(UserController.class);
 
     @Inject
-    UserRepository userRepository;
+    private UserRepository userRepository;
     
-    private AtomicBoolean editing = new AtomicBoolean(false);
-    
-    public UserController() {
-        LOGGER.debug("UserController()");
+    @PostConstruct
+    public void postConstruct() {
+        LOGGER.debug("postConstruct()");
     }
     
     public List<User> getList() { return userRepository.findAll(); }
-
-    // --- set, get ---
-    
-    public boolean isEditing() { return editing.get(); }
-
-    public String setEditing(boolean e) {
-        LOGGER.debug("setEditing() " + e);
-        editing.set(e);
-        return "";  // maradjon ott
-    }
 }

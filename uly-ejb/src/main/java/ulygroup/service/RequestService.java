@@ -2,8 +2,8 @@ package ulygroup.service;
 
 import org.jboss.logging.Logger;
 import ulygroup.data.RequestRepository;
-import ulygroup.model.Request;
 import ulygroup.model.Event.Type;
+import ulygroup.model.Request;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -52,17 +52,17 @@ public class RequestService {
         requestEventSrc.fire(request);  // caught in RequestListProducer
     }
 
-    public void persistMod(long id, Consumer<Request> changeSomeField) {
+    public void persistMod(long id, Consumer<Request> changeSomeField, Type eventType) {
         LOGGER.debug("persistMod() id=" + id);
         
         Request tmpReq = findById(id);
         changeSomeField.accept(tmpReq);
         try {
             em.persist(tmpReq);
-            eventService.add(tmpReq.getUser(), Type.Modify, tmpReq.getSumStr(), true);
+            eventService.add(tmpReq.getUser(), eventType, tmpReq.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add(tmpReq.getUser(), Type.Modify, tmpReq.getSumStr(), false);
+            eventService.add(tmpReq.getUser(), eventType, tmpReq.getSumStr(), false);
         }         
         requestEventSrc.fire(tmpReq);
     }
@@ -71,11 +71,12 @@ public class RequestService {
     public void acceptAll() {
         LOGGER.debug("acceptAll()");
 
-        List<Request> reqList = requestRepository.findAll(RequestRepository.Filter.Requested, null);
+        List<Request> reqList = requestRepository.findAll(RequestRepository.Filter.Requested, null, "acceptAll");
 
         reqList.forEach(r -> {
             r.setState(Request.State.Accepted);
             em.persist(r);
+            eventService.add(r.getUser(), Type.Accept, "All", true);
         });
     }
 

@@ -3,6 +3,7 @@ package ulygroup.controller;
 import org.jboss.logging.Logger;
 import ulygroup.data.RequestRepository;
 import ulygroup.data.RequestRepository.Filter;
+import ulygroup.model.Event;
 import ulygroup.model.Request;
 import ulygroup.model.User;
 import ulygroup.service.RequestService;
@@ -18,8 +19,9 @@ import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Named("requestController")
 @SessionScoped
@@ -36,11 +38,11 @@ public class RequestController implements Serializable {
     @Inject
     private LoginController loginController;
 
-    private List<Request> list = Arrays.asList();
+    private List<Request> list = Collections.emptyList();
 
     private boolean editing;
     private Request ediReq;   // the currently edited request
-    
+
     private Filter filter = Filter.All;   // for the admin screen
 
     @Produces
@@ -52,10 +54,18 @@ public class RequestController implements Serializable {
         LOGGER.debug("@PostConstruct");
         User user = loginController.getCurrentUser();
         ediReq = new Request(0, user, 0, Request.State.Requested);
-        User filterUser = loginController.isAdminLoggedIn() ? null : user;
-        list = requestRepository.findAll(filter, filterUser);
+        refreshList("initNewMember()", false);
     }
 
+    private void refreshList(String from, boolean toRefreshPage) {
+        User user = loginController.getCurrentUser();
+        User filterUser = loginController.isAdminLoggedIn() ? null : user;
+        list = new CopyOnWriteArrayList<>(requestRepository.findAll(filter, filterUser, from));
+        if (toRefreshPage) {
+            FacesUtil.refreshPage();
+        }
+    }
+    
     // The [New] button has been pressed
     public String newReq(AjaxBehaviorEvent event) {
         LOGGER.debug("newReq()");
@@ -80,20 +90,23 @@ public class RequestController implements Serializable {
     // Admin: Accept one request
     public String accept(long id) {
         LOGGER.debug("accept() id=" + id);
-        requestService.persistMod(id, r -> r.setAccepted(true) );
+        requestService.persistMod(id, r -> r.setAccepted(true), Event.Type.Accept);
+        refreshList("accept()", true);
         return "";
     }
 
     // Admin: Reject one request
     public String reject(long id) {
         LOGGER.debug("reject() id=" + id);
-        requestService.persistMod(id, r -> r.setAccepted(false) );
+        requestService.persistMod(id, r -> r.setAccepted(false), Event.Type.Reject);
+        refreshList("reject()", true);
         return "";
     }
 
     public String delete(long id) {
         LOGGER.debug("delete() id=" + id);
         requestService.remove(id);
+        refreshList("delete()", true);
         return "";
     }
     
@@ -109,21 +122,28 @@ public class RequestController implements Serializable {
     public String acceptAll() {
         LOGGER.debug("acceptAll()");
         requestService.acceptAll();
+        refreshList("acceptAll()", true);
         return "";
     }
 
     public int countJustRequested() {
-        return 1;
+        return (int) list.stream().filter(r -> r.isRequested()).count();
     } 
     
     public Object submit() {
-        LOGGER.debug("## persist() ediReq=" + ediReq);
-        requestService.persist(ediReq);
+        LOGGER.debug("persist() ediReq=" + ediReq);
+        if (ediReq.getId() == 0) {
+            requestService.persist(ediReq);
+        } else {
+            requestService.persistMod(ediReq.getId(), r -> r.setSum(ediReq.getSum()), Event.Type.Modify);
+        }
+        refreshList("submit()", true);
         return setEditing(false);
     }
     
     // Admin only: selected whether to see All, Accepted or Requested
     public void filterChanged(ValueChangeEvent event) {
+        
         if (event.getPhaseId() != PhaseId.INVOKE_APPLICATION) {
             LOGGER.debug("  [filterChanged(): passing event to INVOKE_APPLICATION phase]");
             event.setPhaseId(PhaseId.INVOKE_APPLICATION);
@@ -132,9 +152,7 @@ public class RequestController implements Serializable {
         }
 
         LOGGER.debug("filterChanged() filter=" + filter);
-        list = requestRepository.findAll(filter, null);   // admin can see all
-
-        FacesUtil.refreshPage();
+        refreshList("filterChanged", true);
     }
 
     public boolean isEditing() { return editing; }

@@ -15,7 +15,8 @@
         <h:outputStylesheet library="css" name="style.css"  />
         
         <h2><h:outputText value="#{msg['req.title']}" /></h2>
-    
+
+        <div class="table-hi-400" >
         <h:dataTable id="reqTable" 
                 value="#{requestController.list}" var="r"
                 styleClass="feri-table"
@@ -69,6 +70,7 @@
           </h:column>
 
         </h:dataTable>
+        </div>
 
         <br/>
 

@@ -8,11 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
-@XmlRootElement
 @Table(name = "Event" )
 public class Event {
 
@@ -72,4 +70,10 @@ public class Event {
 
     public boolean isSuccess() { return success; }
     public void setSuccess(boolean success) { this.success = success; }
+
+    @Override
+    public String toString() {
+        return "Event{" + "id=" + id + ", date=" + date + ", user=" + user + ", type=" + type
+                + ", info='" + info + '\'' + ", success=" + success + '}';
+    }
 }

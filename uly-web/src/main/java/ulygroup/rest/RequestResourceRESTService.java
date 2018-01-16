@@ -47,7 +47,7 @@ public class RequestResourceRESTService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Request> listAllRequests() {
-        return requestRepository.findAll(RequestRepository.Filter.All, null);
+        return requestRepository.findAll(RequestRepository.Filter.All, null, "listAll");
     }
 
     @GET

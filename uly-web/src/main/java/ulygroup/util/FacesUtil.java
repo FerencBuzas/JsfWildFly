@@ -26,7 +26,7 @@ public class FacesUtil implements Serializable {
     }
 
     public static String getRootErrorMessage(Exception e, String defaultMsg) {
-
+        
         // Default to general error message that registration failed.
         String errorMessage = defaultMsg + " See server log for more information";
         if (e == null) {
@@ -48,6 +48,8 @@ public class FacesUtil implements Serializable {
     }
 
     public static String refreshPage() {
+        LOGGER.debug("refreshPage()");
+
         FacesContext context = FacesContext.getCurrentInstance();
         String viewId = context.getViewRoot().getViewId();
         ViewHandler handler = context.getApplication().getViewHandler();

@@ -112,12 +112,16 @@ public class LoginController implements Serializable {
         return currentUser != null && currentUser.getRole() == User.Role.Admin;
     }
 
-    User getCurrentUser() { return facesUtil.getSessionUser(S_CURRENT_USER); }
-    public void setCurrentUser(User user) { facesUtil.setSessionUser(S_CURRENT_USER, user); }
+    User getCurrentUser() {
+        return facesUtil.getSessionUser(S_CURRENT_USER);
+    }
+    public void setCurrentUser(User user) {
+        facesUtil.setSessionUser(S_CURRENT_USER, user);
+    }
 
     // For JSF
     public String getCurrentUserName() {
-        LOGGER.debug("getCurrentUserName()");
+        LOGGER.trace("getCurrentUserName()");
         User cu = getCurrentUser();
         return (cu != null ? cu.getLoginName() : "");
     }

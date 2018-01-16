@@ -10,11 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 @Entity
-@XmlRootElement
 @Table(name = "Request")
 public class Request implements Serializable {
     
@@ -39,7 +37,8 @@ public class Request implements Serializable {
     }
     
     public Request(long id, User user, long sum, State state) {
-        LOGGER.debug(String.format("Request() id=%d user=%s sum=%d", id, user.getLoginName(), sum));
+        LOGGER.debug(String.format("Request() id=%d user=%s sum=%d", id, 
+                user == null ? "" : user.getLoginName(), sum));
         this.id = id;
         this.user = user;
         this.sum = sum;
@@ -72,6 +71,6 @@ public class Request implements Serializable {
     @Override
     public String toString() {
         String userName = (user == null? "null" : user.getLoginName());
-        return String.format("req[id=%d user=%s sum=%d]\n", id, userName, sum);
+        return String.format("req[id=%d user=%s sum=%d]", id, userName, sum);
     }
 }

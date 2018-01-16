@@ -136,6 +136,14 @@
 .left160 {
   margin-left: 160px;
 }
+.table-hi-400 {
+  height: 400px;
+  overflow: auto;
+}
+.table-hi-500 {
+  height: 500px;
+  overflow: auto;
+}
 
 .bg-red {
   background-color: red;

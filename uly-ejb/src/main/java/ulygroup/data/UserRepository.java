@@ -12,6 +12,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+/**
+ * Get one user or all users from the database.
+ */
 @ApplicationScoped
 public class UserRepository {
 
@@ -47,9 +50,7 @@ public class UserRepository {
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
         Root<User> user = criteria.from(User.class);
 
-        criteria.select(user).orderBy(cb.asc(user.get("loginName")));
+        criteria.select(user).orderBy(cb.asc(user.get("name")));
         return em.createQuery(criteria).getResultList();
-        
-//        return em.createQuery("from User", User.class).getResultList();
     }
 }

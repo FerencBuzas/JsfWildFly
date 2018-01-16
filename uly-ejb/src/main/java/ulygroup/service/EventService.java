@@ -5,16 +5,13 @@ import ulygroup.model.Event;
 import ulygroup.model.User;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.Date;
-import java.util.List;
 
-@ApplicationScoped
+// The @Stateless annotation eliminates the need for manual transaction demarcation
+@Stateless
 public class EventService {
 
     private static final Logger LOGGER = Logger.getLogger(EventService.class);
@@ -34,16 +31,5 @@ public class EventService {
         LOGGER.debug("add(): " + event);
 
         em.persist(event);
-    }
-
-    public List<Event> getList() {
-        LOGGER.debug("getList");
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Event> criteria = cb.createQuery(Event.class);
-        Root<Event> user = criteria.from(Event.class);
-
-        criteria.select(user).orderBy(cb.asc(user.get("user")));
-        return em.createQuery(criteria).getResultList();
     }
 }
