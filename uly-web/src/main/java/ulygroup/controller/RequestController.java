@@ -1,19 +1,17 @@
 package ulygroup.controller;
 
 import org.jboss.logging.Logger;
-import ulygroup.data.LoginManager;
 import ulygroup.data.RequestRepository;
 import ulygroup.data.RequestRepository.Filter;
 import ulygroup.model.Request;
 import ulygroup.model.User;
 import ulygroup.service.RequestService;
-import ulygroup.util.FeriUtil;
+import ulygroup.util.FacesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.component.html.HtmlCommandButton;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
@@ -36,10 +34,7 @@ public class RequestController implements Serializable {
     private RequestService requestService;
 
     @Inject
-    private LoginManager loginManager;
-
-    @Inject
-    private FacesContext facesContext;
+    private LoginController loginController;
 
     private List<Request> list = Arrays.asList();
 
@@ -55,8 +50,9 @@ public class RequestController implements Serializable {
     @PostConstruct
     public void initNewMember() {
         LOGGER.debug("@PostConstruct");
-        ediReq = new Request(0, loginManager.getCurrentUser(), 0, Request.State.Requested);
-        User filterUser = loginManager.isAdminLoggedIn() ? null : loginManager.getCurrentUser();
+        User user = loginController.getCurrentUser();
+        ediReq = new Request(0, user, 0, Request.State.Requested);
+        User filterUser = loginController.isAdminLoggedIn() ? null : user;
         list = requestRepository.findAll(filter, filterUser);
     }
 
@@ -138,7 +134,7 @@ public class RequestController implements Serializable {
         LOGGER.debug("filterChanged() filter=" + filter);
         list = requestRepository.findAll(filter, null);   // admin can see all
 
-        FeriUtil.refreshPage();
+        FacesUtil.refreshPage();
     }
 
     public boolean isEditing() { return editing; }

@@ -7,7 +7,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>protected</web-resource-name>
-            <url-pattern>protected/*</url-pattern>
+            <url-pattern>protko/*</url-pattern>
           <http-method>GET</http-method>
           <http-method>POST</http-method>
         </web-resource-collection>

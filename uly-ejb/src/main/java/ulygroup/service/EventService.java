@@ -1,9 +1,10 @@
 package ulygroup.service;
 
 import org.jboss.logging.Logger;
-import ulygroup.data.LoginManager;
 import ulygroup.model.Event;
+import ulygroup.model.User;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,12 +22,15 @@ public class EventService {
     @Inject
     private EntityManager em;
     
-    @Inject
-    private LoginManager loginManager;
+    @PostConstruct
+    public void postConstruct() {
+        LOGGER.debug("@PostConstruct");
+    }
 
-    public void add(Event.Type type, String info, boolean success) {
 
-        Event event = new Event(0, new Date(), loginManager.getCurrentUser(), type, info, success);
+    public void add(User user, Event.Type type, String info, boolean success) {
+
+        Event event = new Event(0, new Date(), user, type, info, success);
         LOGGER.debug("add(): " + event);
 
         em.persist(event);

@@ -5,6 +5,7 @@ import ulygroup.data.RequestRepository;
 import ulygroup.model.Request;
 import ulygroup.model.Event.Type;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -28,7 +29,13 @@ public class RequestService {
     
     @Inject
     private EventService eventService;
-    
+
+    @PostConstruct
+    public void postConstruct() {
+        LOGGER.debug("@PostConstruct");
+    }
+
+
     public void persist(Request request) {
         LOGGER.debug("persist(): " + request);
         if (request.getId() != 0) {
@@ -37,10 +44,10 @@ public class RequestService {
         
         try {
             em.persist(request);
-            eventService.add(Type.Request, request.getSumStr(), true);
+            eventService.add(request.getUser(), Type.Request, request.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add(Type.Request, request.getSumStr(), false);
+            eventService.add(request.getUser(), Type.Request, request.getSumStr(), false);
         }
         requestEventSrc.fire(request);  // caught in RequestListProducer
     }
@@ -52,10 +59,10 @@ public class RequestService {
         changeSomeField.accept(tmpReq);
         try {
             em.persist(tmpReq);
-            eventService.add(Type.Modify, tmpReq.getSumStr(), true);
+            eventService.add(tmpReq.getUser(), Type.Modify, tmpReq.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add(Type.Modify, tmpReq.getSumStr(), false);
+            eventService.add(tmpReq.getUser(), Type.Modify, tmpReq.getSumStr(), false);
         }         
         requestEventSrc.fire(tmpReq);
     }
@@ -78,10 +85,10 @@ public class RequestService {
         Request r = em.find(Request.class, id);
         try {
             em.remove(r);
-            eventService.add(Type.Delete, r.getSumStr(), true);
+            eventService.add(r.getUser(), Type.Delete, r.getSumStr(), true);
         }
         catch (Exception e) {
-            eventService.add(Type.Delete, r.getSumStr(), false);
+            eventService.add(r.getUser(), Type.Delete, r.getSumStr(), false);
         }
         requestEventSrc.fire(r);
     }

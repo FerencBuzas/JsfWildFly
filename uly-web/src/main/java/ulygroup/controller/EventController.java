@@ -21,6 +21,9 @@ public class EventController implements Serializable {
     @Inject
     private EventService eventService;
 
+    @Inject
+    private LoginController loginController;
+    
     private ResourceBundle resourceBundle;
 
     public List<Event> getList() {
@@ -28,7 +31,7 @@ public class EventController implements Serializable {
     }
 
     public void add(Event.Type type, String info, boolean success) {
-        eventService.add(type, info, success);
+        eventService.add(loginController.getCurrentUser(), type, info, success);
     }
 
     @PostConstruct

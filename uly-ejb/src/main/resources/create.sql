@@ -13,7 +13,7 @@ CREATE TABLE `Roles` (
   `PrincipalID` varchar(255) NOT NULL,
   `Role`        varchar(255) NOT NULL,
   `RoleGroup`   varchar(255) NOT NULL,
-  PRIMARY KEY (`PrincipalID`)
+  PRIMARY KEY (`PrincipalID`, `Role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- both for JAAS and the application

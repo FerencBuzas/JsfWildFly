@@ -1,78 +1,82 @@
 package ulygroup.controller;
 
 import org.jboss.logging.Logger;
-import ulygroup.data.LoginManager;
+import ulygroup.data.UserRepository;
 import ulygroup.model.User;
+import ulygroup.util.FacesUtil;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 
 @Named("loginController")
-@ManagedBean
-@Singleton    // TODO: make it multiuser
+@SessionScoped
 public class LoginController implements Serializable {
 
     private static final long serialVersionUID = -2879890213L;
 
     private static final Logger LOGGER = Logger.getLogger(LoginController.class);
 
-    public static final String HOME_PAGE_REDIRECT = "index.xhtml?faces-redirect=true";
-    public static final String LOGOUT_PAGE_REDIRECT = "login.xhtml?faces-redirect=true";
+    private static final String HOME_PAGE_REDIRECT = "index.xhtml?faces-redirect=true";
+    private static final String LOGOUT_PAGE_REDIRECT = "login.xhtml?faces-redirect=true";
+
+    private static final String S_CURRENT_USER = "currentUser";
+    private static final String S_EDIT_USER = "editUser";
 
     @Inject
-    private LoginManager loginManager;
-
-    private User ediUser;
+    private FacesUtil facesUtil;
     
-    public User getEdiUser() { return ediUser; }
-
+    @Inject
+    private UserRepository userRepository;
+    
     @PostConstruct
-    public void initNewMember() {
-        if (ediUser == null) {
+    public void postConstruct() {
+        if (getEdiUser() == null) {
             LOGGER.info("@PostConstruct, creating ediUser");
-            ediUser = new User(0, null, null, null, User.Role.User);
+            setEdiUser(new User(0, null, null, null, User.Role.User));
         }
     }
 
+    public User getEdiUser() { return facesUtil.getSessionUser(S_EDIT_USER); }
+    public void setEdiUser(User user) { facesUtil.setSessionUser(S_EDIT_USER, user); }
+
     public String login() {
 
-        LOGGER.info("## login() name=" + ediUser.getLoginName() + " password=" + ediUser.getPassword());
+        User eu = getEdiUser();
+        LOGGER.info("## login() name=" + eu.getLoginName() + " password=" + eu.getPassword());
 
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        LOGGER.info("## request authType="+request.getAuthType() + " userPrincipal: "+request.getUserPrincipal());
-        
+        LOGGER.debug("request authType=" + request.getAuthType() + " userPr: " + request.getUserPrincipal());
+
         try {
-            request.login(ediUser.getLoginName(), ediUser.getPassword());
-            LOGGER.info("## Survived request.login, redirecting to " + HOME_PAGE_REDIRECT);
-            return HOME_PAGE_REDIRECT;
+            request.login(eu.getLoginName(), eu.getPassword());
         }
         catch (ServletException e) {
-            LOGGER.info("## login failed :(");
+            LOGGER.info("login failed");
             context.addMessage("Ajaj", new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", e.toString()));
             return null;
         }
         
-//        if (loginManager.login(loginName, password)) {
-//            return HOME_PAGE_REDIRECT;
-//        } else {
-//            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", "Invalid or unknown credentials."));
-//            return null;
-//        }
+        // Login successful, set members, log
+        User user = userRepository.findByLoginName(eu.getLoginName());
+        setCurrentUser(user);
+        facesUtil.logRequest(request);
+        LOGGER.debug("isLoggedIn: " + getCurrentUser() + " isAdmin: " + isAdminLoggedIn());
+        LOGGER.debug("login: OK, redirecting to " + HOME_PAGE_REDIRECT);
+        return HOME_PAGE_REDIRECT;
     }
-
+        
     public String logout() {
-        String identifier = ediUser.getLoginName();
+        String identifier = getEdiUser().getLoginName();
 
         LOGGER.debug("invalidating session for " + identifier);
         FacesContext context = FacesContext.getCurrentInstance();
@@ -96,23 +100,24 @@ public class LoginController implements Serializable {
         return LOGOUT_PAGE_REDIRECT;
     }
 
-    public boolean isLoggedIn() {
-        return loginManager.isLoggedIn();
-    }
-
-    public boolean isAdminLoggedIn() {
-        return loginManager.isAdminLoggedIn();
-    }
-
     public String ifLoggedInForwardHome() {
         return isLoggedIn() ? HOME_PAGE_REDIRECT : null;
     }
+    public boolean isLoggedIn() {
+        return getCurrentUser() != null;
+    }
 
-    public User getCurrentUser() { return loginManager.getCurrentUser(); }
-    
+    public boolean isAdminLoggedIn() {
+        User currentUser = facesUtil.getSessionUser(S_CURRENT_USER);
+        return currentUser != null && currentUser.getRole() == User.Role.Admin;
+    }
+
+    User getCurrentUser() { return facesUtil.getSessionUser(S_CURRENT_USER); }
+    public void setCurrentUser(User user) { facesUtil.setSessionUser(S_CURRENT_USER, user); }
+
     // For JSF
     public String getCurrentUserName() {
-        LOGGER.info("#### getCurrentUserName ");
+        LOGGER.debug("getCurrentUserName()");
         User cu = getCurrentUser();
         return (cu != null ? cu.getLoginName() : "");
     }

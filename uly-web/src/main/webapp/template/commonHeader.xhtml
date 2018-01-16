@@ -19,7 +19,7 @@
                              rendered="#{loginController.loggedIn}"> </h:link> </li>
                 
                 <li> <h:link value="#{msg['main.admin']}" outcome="admin.xhtml"
-                             rendered="#{request.isUserInRole('Admin')}"> </h:link> </li>
+                             rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
 
                 <li> <h:link value="#{msg['main.events']}" outcome="events.xhtml"
                              rendered="#{loginController.adminLoggedIn}"> </h:link> </li>

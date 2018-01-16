@@ -8,9 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans, E.g.
- * @ Inject
- * private EntityManager em;
+ * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans.
  */
 public class Resources {
     // use @SuppressWarnings to tell IDE to ignore warnings about field not being referenced directly
