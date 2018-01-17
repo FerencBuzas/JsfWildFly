@@ -4,9 +4,12 @@ import org.jboss.logging.Logger;
 import ulygroup.data.EventRepository;
 import ulygroup.model.Event;
 import ulygroup.service.EventService;
+import ulygroup.util.FacesUtil;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.event.Reception;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,6 +53,11 @@ public class EventController implements Serializable {
         list = eventRepository.getList();
     }
     
+    public void refreshList(AjaxBehaviorEvent event) {
+        refreshList();
+        FacesUtil.refreshPage();
+    }
+    
     public void add(Event.Type type, String info, boolean success) {
         eventService.add(loginController.getCurrentUser(), type, info, success);
         refreshList();
@@ -59,8 +67,13 @@ public class EventController implements Serializable {
     public String getTypeMsgKey(Event e) {
         return "event.type." + e.getType().toString();
     }
-    
-    
+
+    public void onEventListChanged(@Observes(notifyObserver=Reception.ALWAYS) final Event event) {
+        LOGGER.info("onEventListChanged()");
+        refreshList();
+    }
+
+
     // button [Generate test data] calls this method to create some events
     public void generateTestData(AjaxBehaviorEvent event) {
         int n = 20;

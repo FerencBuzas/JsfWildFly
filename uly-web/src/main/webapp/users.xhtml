@@ -17,7 +17,7 @@
 
         <h1><h:outputText value="#{msg['users.title']}" /></h1>
 
-        <div class="table-hi-400" >
+        <div class="table-hi-300" >
         <h:dataTable value="#{userController.list}" var="u"
                      styleClass="feri-table"
                      cellspacing="6px"
@@ -45,11 +45,12 @@
           </h:column>
 
         </h:dataTable>
-`1        </div>
+        </div>
 
-        <br/>
+        <h2><h:outputText value="#{msg['users.other']}" /></h2>
         <p>
-          <h:commandButton value="Generate test events" rendered="#{loginController.adminLoggedIn}">
+          <h:commandButton value="#{msg['users.genEvents']}"
+                           rendered="#{loginController.adminLoggedIn}">
             <f:ajax listener="#{eventController.generateTestData}" execute="@this" event="click"/>
           </h:commandButton>
         </p >

@@ -1,10 +1,12 @@
 Teendők
 ========================
 
-- tesztelés egyszerre két böngészőből
+- konkurrens használat tesztelése
 - request.login() megy, de request.isUserInRole() még nem
-- a login.xhtml kényszerítése (fura stílus miatt programból megoldva)
+- a login.xhtml kényszerítése (fura stílus miatt jelenleg programból megoldva)
 - frissítések (fire...? legalább "kézzel")
 - jelszavak hash-elt tárolása, használata (jelenleg plain)
+- tesztek: unit és end to end
+
 -------------------------
 - scroll-ozás: láttam rá támogatást pl. PrimeFaces-ben.

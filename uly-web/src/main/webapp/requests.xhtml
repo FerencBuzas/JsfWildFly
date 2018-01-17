@@ -75,7 +75,7 @@
         <br/>
 
         <!-- [New] -->
-        <h:commandButton value="New" styleClass="left160">
+        <h:commandButton value="#{msg['gen.new']}" styleClass="left160">
           <f:ajax listener="#{requestController.newReq}" execute="@this" event="click"
                   render="reqForm"/>
         </h:commandButton>
@@ -85,8 +85,8 @@
           <br/>
           <h:panelGrid id="reqPanelGrid" columns="1" rendered="#{requestController.editing}">
 
-            <h:outputLabel rendered="#{ediReq.id==0}" value="New Request" styleClass="feriH3"/>
-            <h:outputLabel rendered="#{ediReq.id!=0}" value="Modify Request" styleClass="feriH3" />
+            <h:outputLabel rendered="#{ediReq.id==0}" value="#{msg['req.newReq']}" styleClass="feriH3"/>
+            <h:outputLabel rendered="#{ediReq.id!=0}" value="#{msg['req.modReq']}" styleClass="feriH3" />
 
             <h:panelGrid id="reqPanelGrid2" columns="3" cellpadding="5" rendered="#{requestController.editing}">
               
@@ -98,15 +98,15 @@
               </h:inputText>
               <h:message for="sumInput" display="icon" />
 
-              <h:commandButton value="Submit" action="#{requestController.submit()}" />
-              <h:commandButton value="Cancel" action="#{requestController.setEditing(false)}"
+              <h:commandButton value="#{msg['gen.submit']}" action="#{requestController.submit()}" />
+              <h:commandButton value="#{msg['gen.cancel']}" action="#{requestController.setEditing(false)}"
                                immediate="true" />
 
             </h:panelGrid>
           </h:panelGrid>
 
         </h:form>
-
+        
       </ui:define>
     </ui:composition>
 

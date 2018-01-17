@@ -136,6 +136,10 @@
 .left160 {
   margin-left: 160px;
 }
+.table-hi-300 {
+  height: 300px;
+  overflow: auto;
+}
 .table-hi-400 {
   height: 400px;
   overflow: auto;

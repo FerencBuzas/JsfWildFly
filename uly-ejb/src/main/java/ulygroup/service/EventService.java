@@ -18,18 +18,22 @@ public class EventService {
 
     @Inject
     private EntityManager em;
-    
+
+    @Inject
+    private javax.enterprise.event.Event<Event> eventSrc;
+
     @PostConstruct
     public void postConstruct() {
         LOGGER.debug("@PostConstruct");
     }
 
-
+    // Add an event to the repo, then notify observers
     public void add(User user, Event.Type type, String info, boolean success) {
 
         Event event = new Event(0, new Date(), user, type, info, success);
         LOGGER.debug("add(): " + event);
 
         em.persist(event);
+        eventSrc.fire(event); 
     }
 }

@@ -18,7 +18,7 @@
 
         <h1><h:outputText value="#{msg['events.title']}" /></h1>
 
-        <div class="table-hi-500" >
+        <div id="evTableDiv" class="table-hi-500" >
         <h:dataTable value="#{eventController.list}" var="e"
                      styleClass="feri-table"
                      cellspacing="6px"
@@ -57,6 +57,11 @@
 
         </h:dataTable>
         </div>
+        
+        <h:form>
+          <h:commandButton value="#{msg['gen.refresh']}" styleClass="left160"
+                           action="#{eventController.refreshList}" render="evTableDiv"/>
+        </h:form>
 
       </ui:define>
     </ui:composition>
