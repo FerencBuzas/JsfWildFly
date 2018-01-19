@@ -5,15 +5,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head>
-    <title>Login</title>
-    <f:metadata>
-        <f:viewAction action="#{loginController.ifLoggedInForwardHome()}" />
-    </f:metadata>
-</h:head>
-
 <h:body>
-
   <ui:composition template="/template/commonLayout.xhtml">
     <ui:define name="content">
       <h:outputStylesheet library="css" name="style.css"  />
@@ -49,6 +41,10 @@
                          value="#{msg['login.button']}" styleClass="left80">
         </h:commandButton>
 
+        <!--<h:commandButton id="loginButton" value="#{msg['login.button']}" styleClass="left80">-->
+          <!--<f:ajax listener="#{loginController.login}" execute="@this" event="click"-->
+                  <!--render="loginForm"/>-->
+        <!--</h:commandButton>-->
 
       </h:form>
 

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "Myuser")
 public class User {
 
-    public enum Role {Admin, User }
+    public enum Role {Admin, User}
 
     @Id
     @GeneratedValue

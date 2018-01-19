@@ -4,22 +4,20 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head>
-  <title>Ulyssys Task</title>
-</h:head>
-
 <h:body>
-
   <ui:composition template="/template/commonLayout.xhtml">
-
     <ui:define name="content">
+      
       <h:outputText value="#{msg['main.content']}" escape="false" />
       <br/><br/>
       <h:link value="#{msg['main.login']}" outcome="login.xhtml"
               rendered="#{!loginController.loggedIn}"> </h:link>
+      
+      <h:form>
+        <h:commandButton value="Log roles" action="#{facesUtil.logRequest}" /> 
+      </h:form>
+      
     </ui:define>
-
   </ui:composition>
-  
 </h:body>
 </html>

@@ -30,6 +30,9 @@ public class RequestController implements Serializable {
     private static final Logger LOGGER = Logger.getLogger(RequestController.class);
 
     @Inject
+    private FacesUtil facesUtil;
+    
+    @Inject
     private RequestRepository requestRepository;
 
     @Inject
@@ -62,7 +65,7 @@ public class RequestController implements Serializable {
         User filterUser = loginController.isAdminLoggedIn() ? null : user;
         list = new CopyOnWriteArrayList<>(requestRepository.findAll(filter, filterUser, from));
         if (toRefreshPage) {
-            FacesUtil.refreshPage();
+            facesUtil.refreshPage();
         }
     }
     

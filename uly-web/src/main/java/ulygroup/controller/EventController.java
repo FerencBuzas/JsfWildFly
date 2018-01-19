@@ -31,6 +31,9 @@ public class EventController implements Serializable {
     private EventService eventService;
 
     @Inject
+    private FacesUtil facesUtil;
+    
+    @Inject
     private LoginController loginController;
     
     private ResourceBundle resourceBundle;
@@ -55,7 +58,7 @@ public class EventController implements Serializable {
     
     public void refreshList(AjaxBehaviorEvent event) {
         refreshList();
-        FacesUtil.refreshPage();
+        facesUtil.refreshPage();
     }
     
     public void add(Event.Type type, String info, boolean success) {

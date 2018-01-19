@@ -6,19 +6,21 @@ import ulygroup.model.User;
 import ulygroup.util.FacesUtil;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
 @Named("loginController")
-@SessionScoped
+@ApplicationScoped
 public class LoginController implements Serializable {
 
     private static final long serialVersionUID = -2879890213L;
@@ -39,8 +41,9 @@ public class LoginController implements Serializable {
     
     @PostConstruct
     public void postConstruct() {
+        LOGGER.debug("@PostConstruct");
         if (getEdiUser() == null) {
-            LOGGER.info("@PostConstruct, creating ediUser");
+            LOGGER.debug("  PostC, creating ediUser");
             setEdiUser(new User(0, null, null, null, User.Role.User));
         }
     }
@@ -48,30 +51,44 @@ public class LoginController implements Serializable {
     public User getEdiUser() { return facesUtil.getSessionUser(S_EDIT_USER); }
     public void setEdiUser(User user) { facesUtil.setSessionUser(S_EDIT_USER, user); }
 
+    public void login(AjaxBehaviorEvent evt) {   // for experiments with Ajax 
+        login();
+    }
+    
     public String login() {
 
+        LOGGER.info("## login()");
         User eu = getEdiUser();
-        LOGGER.info("## login() name=" + eu.getLoginName() + " password=" + eu.getPassword());
+        LOGGER.debug("login: name=" + eu.getLoginName() + " password=" + eu.getPassword());
 
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        LOGGER.debug("request authType=" + request.getAuthType() + " userPr: " + request.getUserPrincipal());
+        ExternalContext externalContext = context.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
 
+        HttpServletResponse response;
         try {
             request.login(eu.getLoginName(), eu.getPassword());
+            response = (HttpServletResponse) externalContext.getResponse();
+            request.authenticate(response);
+            LOGGER.debug("## login survived");
         }
-        catch (ServletException e) {
-            LOGGER.info("login failed");
+        catch (ServletException | IOException e) {
+            LOGGER.info("## login failed");
             context.addMessage("Ajaj", new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed", e.toString()));
             return null;
         }
-        
+
         // Login successful, set members, log
+        facesUtil.logRequest(request);
+        if (response != null) {
+            facesUtil.logResponse(response);
+        }
+        
         User user = userRepository.findByLoginName(eu.getLoginName());
         setCurrentUser(user);
-        facesUtil.logRequest(request);
         LOGGER.debug("isLoggedIn: " + getCurrentUser() + " isAdmin: " + isAdminLoggedIn());
         LOGGER.debug("login: OK, redirecting to " + HOME_PAGE_REDIRECT);
+        
         return HOME_PAGE_REDIRECT;
     }
         
@@ -88,7 +105,6 @@ public class LoginController implements Serializable {
         } catch (ServletException e) {
             LOGGER.info("logout() error");
         }
-        externalContext.invalidateSession();
 
         try {
             externalContext.redirect(LOGOUT_PAGE_REDIRECT);

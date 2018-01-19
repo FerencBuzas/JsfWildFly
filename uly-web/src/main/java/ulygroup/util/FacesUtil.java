@@ -4,16 +4,20 @@ import org.jboss.logging.Logger;
 import ulygroup.model.User;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.ViewHandler;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.security.Principal;
 
-@ApplicationScoped
+@Named("facesUtil")
+@SessionScoped
 public class FacesUtil implements Serializable {
     
     private static final long serialVersionUID = -178234L;
@@ -25,29 +29,7 @@ public class FacesUtil implements Serializable {
         LOGGER.debug("postConstruct()");
     }
 
-    public static String getRootErrorMessage(Exception e, String defaultMsg) {
-        
-        // Default to general error message that registration failed.
-        String errorMessage = defaultMsg + " See server log for more information";
-        if (e == null) {
-            // This shouldn't happen, but return the default messages
-            return errorMessage;
-        }
-
-        // Start with the exception and recurse to find the root cause
-        Throwable t = e;
-        while (t != null) {
-
-            // Get the message from the Throwable class instance
-            errorMessage = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-
-        // This is the root cause message
-        return errorMessage;
-    }
-
-    public static String refreshPage() {
+    public String refreshPage() {
         LOGGER.debug("refreshPage()");
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -79,8 +61,9 @@ public class FacesUtil implements Serializable {
 
     // ====================== HTTP ============================
     public void logRequest(HttpServletRequest request) {
-        LOGGER.debug("request princi=" + request.getUserPrincipal().getName()
-                + " remU=" + request.getRemoteUser()
+        Principal pr = request.getUserPrincipal();
+        LOGGER.debug("request princi=" + pr + "  pr class=" + pr.getClass().getName()
+                + "\n  remU=" + request.getRemoteUser()
                 + " m=" + request.getMethod()
                 + " auth=" + request.getAuthType() 
                 + "\n  contP=" + request.getContextPath()
@@ -88,8 +71,23 @@ public class FacesUtil implements Serializable {
                 + " pathInfo=" + request.getPathInfo()
                 + " rURI=" + request.getRequestURI()
                 + " qS=" + request.getQueryString()
-                + "\n  req.isInRole  Admin=" + request.isUserInRole("Admin")
+                + "\n  req.isUserInRole  Admin=" + request.isUserInRole("Admin")
                 + "  User=" + request.isUserInRole("User")
+                + "  SuperUser=" + request.isUserInRole("SuperUser")
+                + "  Administrator=" + request.isUserInRole("Administrator")
+                + "  Manager=" + request.isUserInRole("Manager")
+                + "  **=" + request.isUserInRole("**")  // see ..oracle./com/javaee/7/..HttpServletRequest
         );
+    }
+
+    public void logRequest() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
+        logRequest(request);
+    }
+
+    public void logResponse(HttpServletResponse response) {
+        LOGGER.debug("response " + response);
     }
 }
