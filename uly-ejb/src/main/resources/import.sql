@@ -1,11 +1,7 @@
 -- Create database, tables and some test data. --
+-- Call this after create.sql
 
 USE uly;
-
--- TRUNCATE TABLE Event;
--- TRUNCATE TABLE Request;
--- TRUNCATE TABLE Myuser;
--- TRUNCATE TABLE Role;
 
 -- The required 3-3 users
 -- INSERT INTO `Myuser` (id, name, login_name, password, role) VALUES

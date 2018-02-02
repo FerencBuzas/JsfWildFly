@@ -14,7 +14,7 @@
               rendered="#{!loginController.loggedIn}"> </h:link>
       
       <h:form>
-        <h:commandButton value="Log roles" action="#{facesUtil.logRequest}" /> 
+        <h:commandButton value="Log roles" action="#{facesUtil.logRequest(request,false)}" /> 
       </h:form>
       
     </ui:define>

@@ -1,5 +1,8 @@
 -- Create database, tables and some test data. --
 
+CREATE USER 'feri'@'localhost' IDENTIFIED BY 'feri';
+GRANT ALL PRIVILEGES ON *.* TO 'feri'@'localhost' WITH GRANT OPTION;
+
 DROP DATABASE IF EXISTS uly;
 
 CREATE DATABASE uly;

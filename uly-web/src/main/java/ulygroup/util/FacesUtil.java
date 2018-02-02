@@ -60,13 +60,16 @@ public class FacesUtil implements Serializable {
 
 
     // ====================== HTTP ============================
-    public void logRequest(HttpServletRequest request) {
+    public void logRequest(HttpServletRequest request, boolean full) {
         Principal pr = request.getUserPrincipal();
-        LOGGER.debug("request princi=" + pr + "  pr class=" + pr.getClass().getName()
+        String p = pr == null ? "" : "  princi=" + pr + "  pr class=" + pr.getClass().getName(); 
+                LOGGER.debug("request" + p
                 + "\n  remU=" + request.getRemoteUser()
                 + " m=" + request.getMethod()
-                + " auth=" + request.getAuthType() 
-                + "\n  contP=" + request.getContextPath()
+                + " auth=" + request.getAuthType());
+        if (full) {
+            LOGGER.debug(
+                  "  contP=" + request.getContextPath()
                 + " sltPath=" + request.getServletPath() 
                 + " pathInfo=" + request.getPathInfo()
                 + " rURI=" + request.getRequestURI()
@@ -76,15 +79,16 @@ public class FacesUtil implements Serializable {
                 + "  SuperUser=" + request.isUserInRole("SuperUser")
                 + "  Administrator=" + request.isUserInRole("Administrator")
                 + "  Manager=" + request.isUserInRole("Manager")
-                + "  **=" + request.isUserInRole("**")  // see ..oracle./com/javaee/7/..HttpServletRequest
-        );
+                + "  **=" + request.isUserInRole("**")  // see ..oracle HttpServletRequest ref.
+            );
+        }
     }
-
-    public void logRequest() {
+    
+    public void logRequest(boolean full) {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-        logRequest(request);
+        logRequest(request, full);
     }
 
     public void logResponse(HttpServletResponse response) {

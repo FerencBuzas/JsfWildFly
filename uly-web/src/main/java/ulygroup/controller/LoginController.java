@@ -28,7 +28,6 @@ public class LoginController implements Serializable {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class);
 
     private static final String HOME_PAGE_REDIRECT = "index.xhtml?faces-redirect=true";
-    private static final String LOGOUT_PAGE_REDIRECT = "login.xhtml?faces-redirect=true";
 
     private static final String S_CURRENT_USER = "currentUser";
     private static final String S_EDIT_USER = "editUser";
@@ -79,7 +78,7 @@ public class LoginController implements Serializable {
         }
 
         // Login successful, set members, log
-        facesUtil.logRequest(request);
+        facesUtil.logRequest(request, true);
         if (response != null) {
             facesUtil.logResponse(response);
         }
@@ -93,27 +92,23 @@ public class LoginController implements Serializable {
     }
         
     public String logout() {
-        String identifier = getEdiUser().getLoginName();
-
-        LOGGER.debug("invalidating session for " + identifier);
+        LOGGER.debug("logout");
+                
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         
         HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-        try {
-            request.logout();
-        } catch (ServletException e) {
-            LOGGER.info("logout() error");
+        if (request != null) {
+            try {
+                request.logout();
+                LOGGER.info("logout successful");
+            } catch (ServletException e) {
+                LOGGER.info("logout() error");
+            }
+            facesUtil.logRequest(request, false);
         }
-
-        try {
-            externalContext.redirect(LOGOUT_PAGE_REDIRECT);
-        } catch (IOException e) {
-            LOGGER.info("Could not redirect to index.xhtml");
-        }
-
-        LOGGER.info("logout successful for " + identifier);
-        return LOGOUT_PAGE_REDIRECT;
+            
+        return HOME_PAGE_REDIRECT;
     }
 
     public String ifLoggedInForwardHome() {

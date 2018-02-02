@@ -7,7 +7,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>protected</web-resource-name>
-            <url-pattern>QQ/*</url-pattern>
+            <url-pattern>/DUMMY/pages/admin/*</url-pattern>
             <http-method>POST</http-method>
             <http-method>GET</http-method>
             <http-method>PUT</http-method>
@@ -18,8 +18,8 @@
             <role-name>User</role-name>
         </auth-constraint>
     </security-constraint>
-  
-    <login-config>
+
+  <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>ulyDomain</realm-name>
         <form-login-config>

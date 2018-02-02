@@ -13,21 +13,21 @@
           <tr>
             <td>
               <ul id="menu">
-                <li> <h:link value="#{msg['main.main']}" outcome="index.xhtml"> </h:link> </li>
+                <li> <h:link value="#{msg['main.main']}" outcome="/index.xhtml"> </h:link> </li>
                 
-                <li> <h:link value="#{msg['main.requests']}" outcome="requests.xhtml"
+                <li> <h:link value="#{msg['main.requests']}" outcome="/pages/user/requests.xhtml"
                              rendered="#{loginController.loggedIn}"> </h:link> </li>
                 
-                <li> <h:link value="#{msg['main.admin']}" outcome="admin.xhtml"
+                <li> <h:link value="#{msg['main.admin']}" outcome="/pages/admin/admin.xhtml"
                              rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
 
-                <li> <h:link value="#{msg['main.events']}" outcome="events.xhtml"
+                <li> <h:link value="#{msg['main.events']}" outcome="/pages/admin/events.xhtml"
                              rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
                 
-                <li> <h:link value="#{msg['main.users']}" outcome="users.xhtml"
+                <li> <h:link value="#{msg['main.users']}" outcome="/pages/admin/users.xhtml"
                              rendered="#{loginController.adminLoggedIn}"> </h:link> </li>
 
-                <li> <h:link value="#{msg['main.login']}" outcome="login.xhtml"
+                <li> <h:link value="#{msg['main.login']}" outcome="/login.xhtml"
                              rendered="#{!loginController.loggedIn}"> </h:link> </li>
               </ul>
             </td>
