@@ -79,7 +79,7 @@ public class EventController implements Serializable {
 
     // button [Generate test data] calls this method to create some events
     public void generateTestData(AjaxBehaviorEvent event) {
-        int n = 20;
+        int n = 5;
         LOGGER.info("generateTestData() n=" + n);
         for (int i = 0; i < n; ++i) {
             Event.Type type = ((i % 3) <= 1 ? Event.Type.Request : Event.Type.Accept);

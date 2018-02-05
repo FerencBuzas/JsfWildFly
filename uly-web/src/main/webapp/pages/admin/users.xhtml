@@ -19,13 +19,8 @@
                      rowClasses="feri-table-odd-row,feri-table-even-row" >
 
           <h:column>
-            <f:facet name="header">Id</f:facet>
-            <div align="right">#{u.id}</div>
-          </h:column>
-
-          <h:column>
-            <f:facet name="header"><h:outputText value="#{msg['users.name']}" /></f:facet>
-            <div align="left">#{u.name}</div>
+            <f:facet name="header"><h:outputText value="#{msg['users.fullName']}" /></f:facet>
+            <div align="left">#{u.fullName}</div>
           </h:column>
 
           <h:column>
@@ -35,7 +30,7 @@
 
           <h:column>
             <f:facet name="header"><h:outputText value="#{msg['users.role']}" /></f:facet>
-            <div align="left">#{u.role}</div>
+            <div align="left">#{u.rolesString}</div>
           </h:column>
 
         </h:dataTable>

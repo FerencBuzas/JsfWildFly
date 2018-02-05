@@ -20,7 +20,7 @@
 
         <h:panelGrid columns="3" cellpadding="5">
 
-          <h:outputLabel for="usernameInput" value="#{msg['login.name']}" />
+          <h:outputLabel for="usernameInput" value="#{msg['login.fullName']}" />
           <h:inputText id="usernameInput" value="#{loginController.ediUser.loginName}"
                        required="true">
             <f:validateLength minimum="3" />
@@ -40,11 +40,6 @@
         <h:commandButton id="loginButton" action="#{loginController.login}"
                          value="#{msg['login.button']}" styleClass="left80">
         </h:commandButton>
-
-        <!--<h:commandButton id="loginButton" value="#{msg['login.button']}" styleClass="left80">-->
-          <!--<f:ajax listener="#{loginController.login}" execute="@this" event="click"-->
-                  <!--render="loginForm"/>-->
-        <!--</h:commandButton>-->
 
       </h:form>
 

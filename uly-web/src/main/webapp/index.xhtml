@@ -13,10 +13,6 @@
       <h:link value="#{msg['main.login']}" outcome="login.xhtml"
               rendered="#{!loginController.loggedIn}"> </h:link>
       
-      <h:form>
-        <h:commandButton value="Log roles" action="#{facesUtil.logRequest(request,false)}" /> 
-      </h:form>
-      
     </ui:define>
   </ui:composition>
 </h:body>

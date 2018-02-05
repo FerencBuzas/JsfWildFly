@@ -2,6 +2,7 @@ package ulygroup.controller;
 
 import org.jboss.logging.Logger;
 import ulygroup.data.UserRepository;
+import ulygroup.model.TestData;
 import ulygroup.model.User;
 import ulygroup.util.FacesUtil;
 
@@ -38,12 +39,18 @@ public class LoginController implements Serializable {
     @Inject
     private UserRepository userRepository;
     
+    @Inject
+    TestData testData;
+    
     @PostConstruct
     public void postConstruct() {
         LOGGER.debug("@PostConstruct");
+
+        testData.createData();
+        
         if (getEdiUser() == null) {
             LOGGER.debug("  PostC, creating ediUser");
-            setEdiUser(new User(0, null, null, null, User.Role.User));
+            setEdiUser(new User());
         }
     }
 
@@ -69,7 +76,7 @@ public class LoginController implements Serializable {
             request.login(eu.getLoginName(), eu.getPassword());
             response = (HttpServletResponse) externalContext.getResponse();
             request.authenticate(response);
-            LOGGER.debug("## login survived");
+            LOGGER.debug("login survived");
         }
         catch (ServletException | IOException e) {
             LOGGER.info("## login failed");
@@ -107,7 +114,8 @@ public class LoginController implements Serializable {
             }
             facesUtil.logRequest(request, false);
         }
-            
+        setCurrentUser(null);
+        
         return HOME_PAGE_REDIRECT;
     }
 
@@ -120,7 +128,7 @@ public class LoginController implements Serializable {
 
     public boolean isAdminLoggedIn() {
         User currentUser = facesUtil.getSessionUser(S_CURRENT_USER);
-        return currentUser != null && currentUser.getRole() == User.Role.Admin;
+        return currentUser != null && currentUser.hasAdminRole();
     }
 
     User getCurrentUser() {

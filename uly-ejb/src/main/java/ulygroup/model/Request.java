@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Request")
+@Table(name = "Request", schema="uly")
 public class Request implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(Request.class);

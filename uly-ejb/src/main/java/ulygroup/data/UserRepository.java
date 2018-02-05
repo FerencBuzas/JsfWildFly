@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -27,22 +28,38 @@ public class UserRepository {
         return em.find(User.class, id);
     }
 
+    public User findByLoginNameHSQL(String loginName) {
+        LOGGER.debug("## HSQL findByLoginName-HSQL() " + loginName);
+
+        String userQuery = "SELECT u FROM User u WHERE u.loginName=:loNa";
+        List<User>userList = em.createQuery(userQuery, User.class)
+                .setParameter("loNa", loginName)
+                .getResultList();
+        User result = ((userList == null || userList.isEmpty()) ? null : userList.get(0));
+        LOGGER.debug("end of findByLoginName()");
+        return result;
+    }
+
     public User findByLoginName(String loginName) {
-        LOGGER.debug("findByLoginName() " + loginName);
-        
+        LOGGER.debug("## findByLoginName-CritA() " + loginName);
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
         Root<User> user = criteria.from(User.class);
-        
+
+        User result = null;
         criteria.select(user).where(cb.equal(user.get("loginName"), loginName));
         try {
-            return em.createQuery(criteria).getSingleResult();
+            TypedQuery<User> query = em.createQuery(criteria);
+            result = query.getSingleResult();
         }
         catch (NoResultException e) {
-            return null;
+            LOGGER.info("  noResultException");
         }
+        LOGGER.debug("end of findByLoginNameCrita()");
+        return result;
     }
-    
+
     public List<User> findAll() {
         LOGGER.debug("findAll()");
         
@@ -50,7 +67,7 @@ public class UserRepository {
         CriteriaQuery<User> criteria = cb.createQuery(User.class);
         Root<User> user = criteria.from(User.class);
 
-        criteria.select(user).orderBy(cb.asc(user.get("name")));
+        criteria.select(user).orderBy(cb.asc(user.get("loginName")));
         return em.createQuery(criteria).getResultList();
     }
 }

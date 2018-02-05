@@ -11,6 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import ulygroup.model.Request;
+import ulygroup.model.Role;
 import ulygroup.model.User;
 import ulygroup.util.Resources;
 
@@ -40,7 +41,8 @@ public class RequestServiceTest {
 
     @Test
     public void testAddRequest() throws Exception {
-        User user = new User(1, "Test User", "test", "test", User.Role.User);
+        User user = new User("Test User", "test", "test");
+        user.addRole(new Role(user, "Admin"));
         Request newRequest = new Request(0, user, 200000L, Request.State.Requested);
         requestService.persist(newRequest);
         assertNotNull(newRequest.getId());

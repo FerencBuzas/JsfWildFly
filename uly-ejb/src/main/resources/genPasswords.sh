@@ -22,8 +22,8 @@ function genOne() {
   role="$4"
   gen=$(java -cp picketbox-5.0.2.Final.jar org.jboss.security.Base64Encoder "$login_name" 'SHA-256')
 
-  echo "INSERT INTO Myuser(id, name, login_name, password, role) VALUES"
-  echo "  ($id, '$name', '$login_name', '$gen', '$role');"
+  echo "INSERT INTO Myuser(id, roleName, login_name, password, roles) VALUES"
+  echo "  ($id, '$roleName', '$login_name', '$gen', '$roles');"
   echo ""
 }
 

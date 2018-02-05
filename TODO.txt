@@ -2,11 +2,9 @@ Teendők
 ========================
 
 - konkurrens használat tesztelése
-- request.login() megy, de request.isUserInRole() még nem
-- a login.xhtml kényszerítése (fura stílus miatt jelenleg programból megoldva)
-- frissítések (fire...? legalább "kézzel")
+- a Database autorizáció nem megy (request.isUserInRole sem), ezért a web.xml-ben DUMMY, a menüpontokat korlátozom programból  
 - jelszavak hash-elt tárolása, használata (jelenleg plain)
 - tesztek: unit és end to end
 
 -------------------------
-- scroll-ozás: láttam rá támogatást pl. PrimeFaces-ben.
+- scroll-ozás: láttam rá támogatást pl. PrimeFaces-ben, de ezt most nem függ attl

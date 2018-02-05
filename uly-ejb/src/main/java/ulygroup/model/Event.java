@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "Event" )
+@Table(name = "Event", schema="uly")
 public class Event {
 
     public enum Type { Request, Accept, Reject, Modify, Delete }
