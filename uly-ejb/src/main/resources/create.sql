@@ -30,11 +30,10 @@ CREATE TABLE `Myrole` (
 CREATE TABLE `Event` (
   `id`         bigint(20) NOT NULL,
   `date`       datetime DEFAULT CURRENT_TIMESTAMP,
-  `event_name` varchar(255) DEFAULT NULL,
-  `success`    bit(1) NOT NULL,
   `user_id`    varchar(255) NOT NULL,
-  `info`       varchar(255) DEFAULT NULL,
   `type`       varchar(255) DEFAULT NULL,
+  `info`       varchar(255) DEFAULT NULL,
+  `success`    bit(1) NOT NULL DEFAULT 0,
   
   PRIMARY KEY (`id`),
   KEY `key_ev_user_id` (`user_id`),

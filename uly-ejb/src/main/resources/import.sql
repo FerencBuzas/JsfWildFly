@@ -35,6 +35,6 @@ INSERT INTO Request (id, user_id, sum, state) VALUES (4, 'marci',  200000,  'Req
 INSERT INTO Request (id, user_id, sum, state) VALUES (5, 'guest',  100000,  'Rejected');
 INSERT INTO Request (id, user_id, sum, state) VALUES (6, 'guest',  100000,  'Requested');
 
-INSERT INTO `Event` (id, user_id, type, info, success) VALUES (1, 'bea', 'Accept', '', 1); 
-INSERT INTO `Event` (id, date, user_id, type, info, success) VALUES (2, now(), 'marci', 'Request', '', 0 ); 
-INSERT INTO `Event` (id, date, user_id, type, info, success) VALUES (3, now(), 'guest', 'Modify', 'test1->test2', 0);
+INSERT INTO `Event` (id, user_id, type, info, success) VALUES (1, 'bea',   'Accept', '', 1); 
+INSERT INTO `Event` (id, user_id, type, info, success) VALUES (2, 'marci', 'Request', '', 0 ); 
+INSERT INTO `Event` (id, user_id, type, info, success) VALUES (3, 'guest', 'Modify', 'test1->test2', 0);

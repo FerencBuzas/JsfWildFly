@@ -22,13 +22,9 @@ public class TestData {
         if (userRepository.findAll().size() > 0) {
             return;
         }
-
-        LOGGER.debug("##################");
-        LOGGER.debug("##  createData()");
-        LOGGER.debug("##################");
-
-        User feri = new User("feri", "Buzas Ferenc", "feri", Role.Admin);
-        User bea  = new User("bea",  "Buzas Bea",    "bea", Role.User);
+        
+        User feri = new User("feri", "Buzas Ferenc", "feri", User.Role.Admin);
+        User bea  = new User("bea",  "Buzas Bea",    "bea", User.Role.User);
         em.persist(feri);
         em.persist(bea);
     }

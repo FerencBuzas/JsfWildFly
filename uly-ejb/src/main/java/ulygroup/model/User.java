@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "Myuser", schema="uly")
 public class User implements Serializable {
+    
+    public enum Role { Admin, User }
 
     private static final Logger LOGGER = Logger.getLogger(User.class);
 
