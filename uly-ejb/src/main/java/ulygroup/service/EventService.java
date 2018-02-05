@@ -29,9 +29,10 @@ public class EventService {
 
     // Add an event to the repo, then notify observers
     public void add(User user, Event.Type type, String info, boolean success) {
+        LOGGER.debug(String.format("add() user=%s type=%s info=%s success=%s",
+                            user.getLoginName(), type, info, success));
 
         Event event = new Event(0, new Date(), user, type, info, success);
-        LOGGER.debug("add(): " + event);
 
         em.persist(event);
         eventSrc.fire(event); 

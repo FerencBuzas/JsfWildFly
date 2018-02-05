@@ -96,6 +96,6 @@ public class RequestService {
     
     public Request findById(Long id) {
         LOGGER.debug("findById() id=" + id);
-        return em.find(Request.class, id);
+        return requestRepository.findById(id);
     }
 }

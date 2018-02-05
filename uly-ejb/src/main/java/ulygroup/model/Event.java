@@ -6,7 +6,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -22,8 +23,9 @@ public class Event {
 
     @Column(name = "date")
     private Date date;
-    
-    @ManyToOne
+
+    @OneToOne(optional=false)
+    @JoinColumn(name="user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -73,7 +75,11 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" + "id=" + id + ", date=" + date + ", user=" + user + ", type=" + type
-                + ", info='" + info + '\'' + ", success=" + success + '}';
+        return "Event{id=" + id 
+                + ", date=" + date
+                + ", user=" + (user == null ? "null" : user.getLoginName())
+                + ", type=" + type
+                + ", info='" + info
+                + "', success=" + success + '}';
     }
 }

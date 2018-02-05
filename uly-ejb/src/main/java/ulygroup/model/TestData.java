@@ -27,17 +27,9 @@ public class TestData {
         LOGGER.debug("##  createData()");
         LOGGER.debug("##################");
 
-        User feri = new User("feri", "Buzas Ferenc", "feri");
-        User bea  = new User("bea",  "Buzas Bea",    "bea");
-        Role feriRole  = new Role(feri,  "Admin");
-        Role beaRole   = new Role(bea,   "User");
-        feri.addRole(feriRole);
-        bea.addRole(beaRole);
-
+        User feri = new User("feri", "Buzas Ferenc", "feri", Role.Admin);
+        User bea  = new User("bea",  "Buzas Bea",    "bea", Role.User);
         em.persist(feri);
         em.persist(bea);
-        em.persist(feriRole);
-        em.persist(beaRole);
-        
     }
 }

@@ -4,14 +4,15 @@ import org.jboss.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Myuser", schema="uly")
@@ -30,8 +31,8 @@ public class User implements Serializable {
     @NotNull
     private String password;
     
-    @OneToMany(targetEntity=Role.class, fetch=FetchType.EAGER, mappedBy="user")
-    private Collection<Role> roles;
+    @Transient
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -40,7 +41,6 @@ public class User implements Serializable {
         this.loginName = loginName;
         this.fullName = fullName;
         this.password = password;
-        this.roles = new ArrayList<>();
     }
 
     public User(String loginName, String fullName, String password, Role role) {
@@ -79,36 +79,23 @@ public class User implements Serializable {
     }
 
     public String getRolesString() {
-        String result = "";
-        for (Role role: roles) {
-            if (result.length() > 0) {
-                result += ", ";
-            }
-            result += role.getRoleName();
-        }
-        return result;
+        return roles.stream().map(Role::toString).collect(Collectors.joining(","));
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void addRole(Role... roles) {
+        for (Role role: roles) {
+            this.roles.add(role);
+        }
     }
     
     public boolean hasAdminRole() {
         LOGGER.trace("hasAdminRole() '"+getLoginName()+"' roles: " + roles.size());
-        for (Role role: roles) {
-            if (role.getRoleName().toLowerCase().contains("admin")) {
-                return true;
-            }
-        }
-        return false;
+        return roles.stream().map(Role::toString).anyMatch(s -> s.contains("Admin"));
     }
 
     @Override
     public String toString() {
-        String roleString = "";
-        for (Role role: roles) {
-            roleString += role.getRoleName() + " ";
-        }
-        return String.format("User{fullName='%s', loginName='%s', password='%s', roles='%s'}\n", fullName, loginName, password, roleString);
+        return String.format("User{name='%s', loginName='%s', roles='%s'}\n",
+                fullName, loginName, getRolesString());
     }
 }

@@ -1,6 +1,8 @@
 package ulygroup.data;
 
+import org.hibernate.Session;
 import org.jboss.logging.Logger;
+import ulygroup.model.Role;
 import ulygroup.model.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,6 +13,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -55,9 +59,39 @@ public class UserRepository {
         }
         catch (NoResultException e) {
             LOGGER.info("  noResultException");
+            return null;
         }
-        LOGGER.debug("end of findByLoginNameCrita()");
+        getRoles(result);
+
+        LOGGER.debug("end of findByLoginName()");
         return result;
+    }
+    
+    // Temporary hack until I can handle database authorization correctly
+    // NOTE: this is Hibernate-specific.
+    //
+    private void getRoles(User user) {
+        try ( Session hibernateSession = em.unwrap(Session.class)) {
+
+              hibernateSession.doWork(connection -> {
+                  PreparedStatement statement = connection.prepareStatement(
+                          "SELECT role_name FROM Myrole WHERE princ_id=?");
+                  statement.setString(1, user.getLoginName());
+                  ResultSet rs = statement.executeQuery();
+                  if (rs != null) {
+                      while (rs.next()) {
+                          String roleName = rs.getString(1);
+                          if (roleName.toLowerCase().contains("admin")) {
+                              user.addRole(Role.Admin);
+                          } else {
+                              user.addRole(Role.User);
+                          }
+                      }
+                  }
+              });
+        } catch (Exception e) {
+            LOGGER.warn("## " + e.getMessage());
+        }
     }
 
     public List<User> findAll() {

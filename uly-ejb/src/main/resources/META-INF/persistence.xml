@@ -14,7 +14,6 @@
     
     <class>ulygroup.model.User</class>
     <class>ulygroup.model.Request</class>
-    <class>ulygroup.model.Role</class>
     <class>ulygroup.model.Event</class>
 
     <properties>

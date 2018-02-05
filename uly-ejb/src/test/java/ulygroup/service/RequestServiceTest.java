@@ -41,8 +41,7 @@ public class RequestServiceTest {
 
     @Test
     public void testAddRequest() throws Exception {
-        User user = new User("Test User", "test", "test");
-        user.addRole(new Role(user, "Admin"));
+        User user = new User("Test User", "test", "test", Role.Admin);
         Request newRequest = new Request(0, user, 200000L, Request.State.Requested);
         requestService.persist(newRequest);
         assertNotNull(newRequest.getId());
