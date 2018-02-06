@@ -3,19 +3,21 @@ package ulygroup.model;
 import org.jboss.logging.Logger;
 import ulygroup.data.UserRepository;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.ejb.EJB;
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 
-@Stateless
-public class TestData {
+@Singleton
+public class TestData implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(TestData.class);
-    
-    @Inject
+
+    @PersistenceContext
     private EntityManager em;
 
-    @Inject
+    @EJB
     private UserRepository userRepository;
     
     public void createData() {

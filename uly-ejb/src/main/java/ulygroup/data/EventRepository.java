@@ -4,20 +4,21 @@ import org.jboss.logging.Logger;
 import ulygroup.model.Event;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.List;
 
-@ApplicationScoped
-public class EventRepository {
+@Singleton
+public class EventRepository implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(EventRepository.class);
 
-    @Inject
+    @PersistenceContext
     private EntityManager em;
     
     @PostConstruct

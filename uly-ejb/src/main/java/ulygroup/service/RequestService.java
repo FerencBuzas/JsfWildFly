@@ -9,16 +9,17 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Consumer;
 
-// The @Stateless annotation eliminates the need for manual transaction demarcation
-@Stateless
-public class RequestService {
+@Stateless 
+public class RequestService implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(RequestService.class); 
-
-    @Inject
+    
+    @PersistenceContext
     private EntityManager em;
 
     @Inject
@@ -54,7 +55,7 @@ public class RequestService {
 
     public void persistMod(long id, Consumer<Request> changeSomeField, Type eventType) {
         LOGGER.debug("persistMod() id=" + id);
-        
+
         Request tmpReq = findById(id);
         changeSomeField.accept(tmpReq);
         try {
@@ -96,6 +97,6 @@ public class RequestService {
     
     public Request findById(Long id) {
         LOGGER.debug("findById() id=" + id);
-        return requestRepository.findById(id);
+        return em.find(Request.class, id);
     }
 }

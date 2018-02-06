@@ -5,9 +5,9 @@ import ulygroup.model.Request;
 import ulygroup.model.User;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -19,16 +19,14 @@ import java.util.List;
 /**
  * Selects requests (one or filtered or all).
  */
-@ApplicationScoped
+@Stateless
 public class RequestRepository implements Serializable {
     
     private static final Logger LOGGER = Logger.getLogger(RequestRepository.class);
 
     public enum Filter { Requested, Accepted, All }
 
-    private List<Request> list;
-
-    @Inject
+    @PersistenceContext
     private EntityManager em;
 
     @PostConstruct
@@ -72,7 +70,7 @@ public class RequestRepository implements Serializable {
                 .where(predArray)
                 .orderBy(cb.asc(request.get("user")));
 
-        list = em.createQuery(criteria).getResultList();
+        List<Request> list = em.createQuery(criteria).getResultList();
         
         LOGGER.debug("  end of findAll \n## list: " + list);
 

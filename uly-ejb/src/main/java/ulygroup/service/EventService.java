@@ -8,15 +8,16 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Date;
 
 // The @Stateless annotation eliminates the need for manual transaction demarcation
 @Stateless
 public class EventService {
-
+    
     private static final Logger LOGGER = Logger.getLogger(EventService.class);
 
-    @Inject
+    @PersistenceContext
     private EntityManager em;
 
     @Inject

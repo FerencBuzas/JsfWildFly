@@ -4,14 +4,14 @@ import org.hibernate.Session;
 import org.jboss.logging.Logger;
 import ulygroup.model.User;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,12 +21,12 @@ import java.util.List;
 /**
  * Get one user or all users from the database.
  */
-@ApplicationScoped
-public class UserRepository {
+@javax.ejb.Singleton
+public class UserRepository implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(UserRepository.class);
 
-    @Inject
+    @PersistenceContext
     private EntityManager em;
 
     public User findByLoginName(String loginName) {
