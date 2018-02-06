@@ -62,7 +62,7 @@ public class EventController implements Serializable {
     }
     
     public void add(Event.Type type, String info, boolean success) {
-        eventService.add(loginController.getCurrentUser(), type, info, success);
+        eventService.add(Event.create(loginController.getCurrentUser(), type, info, success));
         refreshList();
     }
 
@@ -84,7 +84,7 @@ public class EventController implements Serializable {
         for (int i = 0; i < n; ++i) {
             Event.Type type = ((i % 3) <= 1 ? Event.Type.Request : Event.Type.Accept);
             String info = "info_gen_" + i;
-            eventService.add(loginController.getCurrentUser(), type, info, true);
+            eventService.add(Event.create(loginController.getCurrentUser(), type, info, true));
         }
         refreshList();
     }

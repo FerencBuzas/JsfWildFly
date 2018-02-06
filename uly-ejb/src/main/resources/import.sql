@@ -28,13 +28,13 @@ INSERT INTO `Myrole` (princ_id, role_name) VALUES ('marci',  'User');
 INSERT INTO `Myrole` (princ_id, role_name) VALUES ('guest', 'User');
 
 -- Some test data for development
-INSERT INTO Request (id, user_id, sum, state) VALUES (1, 'bea',  400000,  'Accepted');
-INSERT INTO Request (id, user_id, sum, state) VALUES (2, 'bea',  400000,  'Requested');
-INSERT INTO Request (id, user_id, sum, state) VALUES (3, 'marci',  200000,  'Accepted');
-INSERT INTO Request (id, user_id, sum, state) VALUES (4, 'marci',  200000,  'Requested');
-INSERT INTO Request (id, user_id, sum, state) VALUES (5, 'guest',  100000,  'Rejected');
-INSERT INTO Request (id, user_id, sum, state) VALUES (6, 'guest',  100000,  'Requested');
+INSERT INTO Request (id, user_id, sum, state) VALUES (1, 'bea',   100010,  'Accepted');
+INSERT INTO Request (id, user_id, sum, state) VALUES (2, 'bea',   200010,  'Requested');
+INSERT INTO Request (id, user_id, sum, state) VALUES (3, 'marci', 200020,  'Accepted');
+INSERT INTO Request (id, user_id, sum, state) VALUES (4, 'marci', 300020,  'Requested');
+INSERT INTO Request (id, user_id, sum, state) VALUES (5, 'guest',  50030,  'Rejected');
+INSERT INTO Request (id, user_id, sum, state) VALUES (6, 'guest',  50031,  'Requested');
 
-INSERT INTO `Event` (id, user_id, type, info, success) VALUES (1, 'bea',   'Accept', '', 1); 
-INSERT INTO `Event` (id, user_id, type, info, success) VALUES (2, 'marci', 'Request', '', 0 ); 
-INSERT INTO `Event` (id, user_id, type, info, success) VALUES (3, 'guest', 'Modify', 'test1->test2', 0);
+INSERT INTO `Event` (user_id, type, info, success) VALUES ('bea',   'Accept', '', 1); 
+INSERT INTO `Event` (user_id, type, info, success) VALUES ('marci', 'Request', '', 0 ); 
+INSERT INTO `Event` (user_id, type, info, success) VALUES ('guest', 'Modify', 'test1->test2', 0);

@@ -5,9 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -17,14 +18,14 @@ public class Event {
 
     public enum Type { Request, Accept, Reject, Modify, Delete }
     
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
     private long id;
 
     @Column(name = "date")
     private Date date;
 
-    @OneToOne(optional=false)
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
@@ -39,13 +40,16 @@ public class Event {
     public Event() {
     }
     
-    public Event(long id, Date date, User user, Type type, String info, boolean success) {
-        this.id = id;
-        this.date = date;
-        this.user = user;
-        this.type = type;
-        this.info = info;
-        this.success = success;
+    public static Event create(User user, Type type, String info, boolean success)
+    {
+        Event event = new Event();
+        event.setId(0);
+        event.setDate(new Date());
+        event.setUser(user);
+        event.setType(type);
+        event.setInfo(info);
+        event.setSuccess(success);
+        return event;
     }
 
     // --- setters, getters ---
@@ -66,7 +70,7 @@ public class Event {
     
     public Type getType() {return type; }
     public void setType(Type type) {this.type = type; }
-
+    
     public String getInfo() { return info; }
     public void setInfo(String info) { this.info = info; }
 

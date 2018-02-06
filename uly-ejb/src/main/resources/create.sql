@@ -28,7 +28,7 @@ CREATE TABLE `Myrole` (
 );
 
 CREATE TABLE `Event` (
-  `id`         bigint(20) NOT NULL,
+  `id`         bigint(20) NOT NULL AUTO_INCREMENT,
   `date`       datetime DEFAULT CURRENT_TIMESTAMP,
   `user_id`    varchar(255) NOT NULL,
   `type`       varchar(255) DEFAULT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `Event` (
 );
 
 CREATE TABLE `Request` (
-  `id`         bigint(20) NOT NULL,
+  `id`         bigint(20) NOT NULL AUTO_INCREMENT,
   `state`      varchar(255) DEFAULT NULL,
   `sum`        bigint(20) NOT NULL,
   `user_id`    varchar(255) NOT NULL,

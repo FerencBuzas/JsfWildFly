@@ -10,6 +10,7 @@ import ulygroup.service.RequestService;
 import ulygroup.util.FacesUtil;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.component.html.HtmlCommandButton;
@@ -32,10 +33,10 @@ public class RequestController implements Serializable {
     @Inject
     private FacesUtil facesUtil;
     
-    @Inject
+    @EJB
     private RequestRepository requestRepository;
 
-    @Inject
+    @EJB
     private RequestService requestService;
 
     @Inject

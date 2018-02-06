@@ -2,6 +2,7 @@ package ulygroup.service;
 
 import org.jboss.logging.Logger;
 import ulygroup.data.RequestRepository;
+import ulygroup.model.Event;
 import ulygroup.model.Event.Type;
 import ulygroup.model.Request;
 
@@ -36,7 +37,6 @@ public class RequestService implements Serializable {
         LOGGER.debug("@PostConstruct");
     }
 
-
     public void persist(Request request) {
         LOGGER.debug("persist(): " + request);
         if (request.getId() != 0) {
@@ -45,10 +45,10 @@ public class RequestService implements Serializable {
         
         try {
             em.persist(request);
-            eventService.add(request.getUser(), Type.Request, request.getSumStr(), true);
+            eventService.add(em, Event.create(request.getUser(), Type.Request, request.getSumStr(), true));
         }
         catch (Exception e) {
-            eventService.add(request.getUser(), Type.Request, request.getSumStr(), false);
+            eventService.add(em, Event.create(request.getUser(), Type.Request, request.getSumStr(), false));
         }
         requestEventSrc.fire(request);  // caught in RequestListProducer
     }
@@ -59,11 +59,13 @@ public class RequestService implements Serializable {
         Request tmpReq = findById(id);
         changeSomeField.accept(tmpReq);
         try {
-            em.persist(tmpReq);
-            eventService.add(tmpReq.getUser(), eventType, tmpReq.getSumStr(), true);
+            em.merge(tmpReq);
+            Event event = Event.create(tmpReq.getUser(), eventType, tmpReq.getSumStr(), true);
+            em.persist(event);
         }
         catch (Exception e) {
-            eventService.add(tmpReq.getUser(), eventType, tmpReq.getSumStr(), false);
+            LOGGER.warn("## Exception: " + e.getMessage() + " Caused by: " + e.getCause().getMessage());
+            eventService.add(Event.create(tmpReq.getUser(), eventType, tmpReq.getSumStr(), false));
         }         
         requestEventSrc.fire(tmpReq);
     }
@@ -76,8 +78,8 @@ public class RequestService implements Serializable {
 
         reqList.forEach(r -> {
             r.setState(Request.State.Accepted);
-            em.persist(r);
-            eventService.add(r.getUser(), Type.Accept, "All", true);
+            em.merge(r);   // maybe before setState?
+            eventService.add(Event.create(r.getUser(), Type.Accept, "All", true));
         });
     }
 
@@ -87,15 +89,15 @@ public class RequestService implements Serializable {
         Request r = em.find(Request.class, id);
         try {
             em.remove(r);
-            eventService.add(r.getUser(), Type.Delete, r.getSumStr(), true);
+            eventService.add(Event.create(r.getUser(), Type.Delete, r.getSumStr(), true));
         }
         catch (Exception e) {
-            eventService.add(r.getUser(), Type.Delete, r.getSumStr(), false);
+            eventService.add(Event.create(r.getUser(), Type.Delete, r.getSumStr(), false));
         }
         requestEventSrc.fire(r);
     }
     
-    public Request findById(Long id) {
+    private Request findById(Long id) {
         LOGGER.debug("findById() id=" + id);
         return em.find(Request.class, id);
     }

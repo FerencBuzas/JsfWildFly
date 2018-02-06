@@ -59,25 +59,29 @@ public class UserRepository implements Serializable {
         if (user.getRoles().size() > 0) {
             return;  // already read
         }
+        
         try {
             Session hibernateSession = em.unwrap(Session.class);
             hibernateSession.doWork(conn -> getRolesWithJdbc(conn, user));
         } catch (Exception e) {
-            LOGGER.warn("## " + e.getMessage());
+            LOGGER.warn("## " + e.getMessage() + " Cause: " + e.getCause().getMessage());
         }
     }
 
     private void getRolesWithJdbc(Connection connection, User user) throws SQLException {
+        LOGGER.debug("getRolesWithJdbc() for user=" + user.getLoginName());
         
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT role_name FROM Myrole WHERE princ_id=?");
         statement.setString(1, user.getLoginName());
         ResultSet rs = statement.executeQuery();
-        if (rs != null) {
-            while (rs.next()) {
-                String name = rs.getString(1).toLowerCase();
-                user.addRole(name.contains("admin") ? User.Role.Admin : User.Role.User);
-            }
+        if (rs == null) {
+            LOGGER.warn("## No role for user " + user);
+            return;
+        }
+        while (rs.next()) {
+            String name = rs.getString(1).toLowerCase();
+            user.addRole(name.contains("admin") ? User.Role.Admin : User.Role.User);
         }
     }
 
@@ -92,6 +96,8 @@ public class UserRepository implements Serializable {
         List<User> result = em.createQuery(criteria).getResultList();
         
         result.forEach(this::getRoles);
+
+        LOGGER.debug("end of findAll()");
         return result;
     }
 }

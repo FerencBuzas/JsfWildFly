@@ -97,7 +97,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("User{name='%s', loginName='%s', roles='%s'}\n",
-                fullName, loginName, getRolesString());
+        return String.format("User{'%s', '%s', roles='%s'}\n",
+                loginName, fullName, getRolesString());
     }
 }
