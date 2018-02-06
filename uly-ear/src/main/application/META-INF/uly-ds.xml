@@ -10,8 +10,8 @@
     <connection-url>jdbc:mysql://localhost:3306/uly</connection-url>   <!-- tested, needed -->
     <driver>mysql</driver>
     <security>
-      <user-name>root</user-name>   <!-- in 'uly-ejb/src/main/resource/create.sql' -->
-      <password>Feri</password>
+      <user-name>feri</user-name>   <!-- in 'uly-ejb/src/main/resource/create.sql' -->
+      <password>feri</password>
     </security>
   </datasource>
 

@@ -1,60 +1,57 @@
-Gyakorlati feladat
+Megjegyzések
+===============
 
-Kötelezően használandó technológiák
-=====================================
+Az alábbi leírásban ROOT-nak hívom, ahová a ZIP-et kicsomagolod  
 
-- JavaEE
-- Wildfly
-- Mysql
-- JSF
-- Maven
-- JPA
-- cdi használata
-    junior: előny 
-    senior: kötelező
+MySQL adatbázis
+------------------
 
-Logikai entitások:
-====================
-- Felhasználó (név, loginnév, jelszó, típus (enum: kérelmező, jóváhagyó)
-- Kérelmek (felhasználó, összeg, jóváhagyva)
-- Események (dátum, felhasználó, esemény, sikeres / sikertelen)
-- Bejelentkezés
+DDL és DML
+    $ROOT/uly-ear/src/main/application/META-INF/uly-ds.xml  # adatbázis user neve ('feri')
+    $ROOT/work/create.sql   # minden jogot megad 'feri'-nek, táblákat létrehoz  
+    $ROOT/work/import.sql   # tesztadatok a táblákba (3+3 user is)
+    
+  Használat
+    cd $ROOT/work
+    mysql -u root -p
+    source create.sql  
+    source import.sql
 
-Form authetikáció
-=====================
-o Junioroknak saját
-o Senioroknak JAAS
+Autentikáció és autorizáció
+-----------------------------
 
-Feladatok:
-==============
-Három menüpont:
-o Kérelmek
-o Ügyintézői
-o Események
+A Database authorization nem sikerült korrektül, a WildFly adminisztrálásához nem nagyon értek.
+Pedig látszik a logban, hogy használja a principalsQuery-t és a rolesQuery-t,
+és ha elrontok egy mezőnevet az utóbbiban, akkor sikít.
+Tehát megtörténik a rolesQuery beolvasása, mégsem lesz request.isUserInRole() igaz, csak "**"-ra.
 
-Kérelmek
------------
-o A bejelentkezett felhasználó saját kérelmeit láthatja, módosíthatja jóváhagyás előtt
-az összeget, illetve bármikor vehet fel újat
+Kínomban magam is beolvasom a Myuser, Myrole táblákat, és aszerint engedélyezem a menüpontokat.
 
-Jóváhagyás
---------------
-o Az összes jóváhagyott kérelem listázása readonly módban. Az összes jóváhagyásra
-váró kérelem, melyet egy gomb nyomására jóváhagyhat.
+Mindenesetre:
+A <wildfly>/standalone/configuration/standalone.xml-t bemásoltam $ROOT/work/-be.
+(bevallom, nem tudom, hogyan szokás azokat a beállításokat deploy-olni).
+Fő változtatások az eredetihez képest:
 
-Események (létrehozás, állapotváltozások)
-------------------------------------------
+  - mysql driver megadása (h2 alá):
+  - autentikációs adatok: ld. "FORM" illetve "ulyDomain" 
+       
+Futtatás
+----------------------
+  # MySQL táblák létrehozása: ld. fentebb, a "DDL és DMS" cím alatt
+  $ cd <wildfly>
+  $ cp $ROOT/work/standalone.xml standalone/configuration/standalone.xml
+  $ bin/standalone.sh & 
+  $ cd $ROOT
+  $ mvn clean package wildfly:deploy
+  # browser: localhost:8080/uly-web
+  
+Teendők (TODO)
+===============
 
-o Az események megjelenítése readonly módban. Minden módosító eseményt menteni
-kell:
- kérelem létrehozás és módosítás
- kérelem jóváhagyás és elutasítás
-Sikertelen az esemény, ha exception történt
-Admin felületek nem kötelezőek
-
-Leadandó:
------------
-- ear forráskódja
-- mysql sql telepítő script (DDL, DML)
-- az egész zippelve
-- tartalmazzon 3-3- usert
+- konkurrens használat tesztelése (igyekeztem úgy csinálni)
+- a Database autorizáció nem megy (request.isUserInRole() sem), ezért van a web.xml-ben DUMMY
+- jelszavak hash-elt tárolása (jelenleg plain). Generálni így lehet:
+    cd $JBOSS_HOME/modules/system/layers/base/org/picketbox/main/
+    java -cp picketbox-5.0.2.Final.jar org.jboss.security.Base64Encoder "$login_name" 'SHA-256'
+- tesztek: unit és end to end
+- pagination: láttam rá támogatást pl. PrimeFaces-ben, de ezt most nem függ attól
