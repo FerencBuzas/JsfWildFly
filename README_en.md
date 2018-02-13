@@ -1,5 +1,5 @@
-A Demo Project for using WildFly, JPA and JSF together.
-==========================================================
+A Demo Project for using WildFly, MySQL, JPA and JSF together.
+================================================================
 
 The task itself is nothing serious: there are some users, who can make requests,
 and Admin users may confirm them or reject.
@@ -12,7 +12,8 @@ Authentication and authorization should be Database; the first one is working bu
 TODO
 =========
 
-* Test concurrent usage with multiple client
+* The installer script is not quite complete
+* Test concurrent usage with multiple clients
 * Correct Database authorization
 * Store hashed passwords (now they are plain)
 * Add tests (unit, end to end)
