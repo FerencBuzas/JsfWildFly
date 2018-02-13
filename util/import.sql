@@ -1,7 +1,7 @@
 -- Create some test data. --
 -- Call this after create.sql.
 
-USE uly;
+USE jsfwf;
 
 -- Scrambled passwords of the users
 --   'feri',   '1k697MUfDmAxLMue4/AKSl9isIIaG+rjOaw+erlGR4c='

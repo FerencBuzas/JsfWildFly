@@ -114,7 +114,7 @@
             <logger category="org.jboss.security">   <!-- Feri -->
                 <level name="DEBUG"/>
             </logger>
-            <logger category="ulygroup">   <!-- Feri -->
+            <logger category="jsfwf">   <!-- Feri -->
                 <level name="DEBUG"/>
             </logger>
             <root-logger>
@@ -453,19 +453,19 @@
                         <auth-module code="Dummy"/>
                     </authentication-jaspi>
                 </security-domain>
-                <security-domain name="ulyDomain" cache-type="default">
+                <security-domain name="jsfwfDomain" cache-type="default">
                     <authentication>
                         <login-module code="Database" flag="required">
-                            <module-option name="dsJndiName" value="java:/jboss/datasources/UlyDS"/>
-                            <module-option name="principalsQuery" value="select password from uly.Myuser where login_name=?"/>
-                            <module-option name="rolesQuery" value="select r.role_name, r.role_name from uly.Myuser u JOIN uly.Myrole r ON u.login_name=r.princ_id WHERE u.login_name=?"/>
+                            <module-option name="dsJndiName" value="java:/jboss/datasources/jsfwfDS"/>
+                            <module-option name="principalsQuery" value="select password from jsfwf.Myuser where login_name=?"/>
+                            <module-option name="rolesQuery" value="select r.role_name, r.role_name from jsfwf.Myuser u JOIN jsfwf.Myrole r ON u.login_name=r.princ_id WHERE u.login_name=?"/>
                         </login-module>
                     </authentication>
                     <authorization>
                         <policy-module code="Database" flag="required">
-                            <module-option name="dsJndiName" value="java:/jboss/datasources/UlyDS"/>
-                            <module-option name="principalsQuery" value="select password from uly.Myuser where login_name=?"/>
-                            <module-option name="rolesQuery" value="select r.role_name, r.role_name from uly.Myuser u JOIN uly.Myrole r ON u.login_name=r.princ_id WHERE u.login_name=?"/>
+                            <module-option name="dsJndiName" value="java:/jboss/datasources/jsfwfDS"/>
+                            <module-option name="principalsQuery" value="select password from jsfwf.Myuser where login_name=?"/>
+                            <module-option name="rolesQuery" value="select r.role_name, r.role_name from jsfwf.Myuser u JOIN jsfwf.Myrole r ON u.login_name=r.princ_id WHERE u.login_name=?"/>
                         </policy-module>
                     </authorization>
                 </security-domain>

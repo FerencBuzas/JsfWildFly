@@ -4,9 +4,9 @@
 # {
 
 wildflyZip="/home/buzas/Downloads/wildfly-11.0.0.Final.zip"
-ulyZip="/home/buzas/Downloads/uly.zip"
+jsfwfZip="/home/buzas/Downloads/jsfwf.zip"
 mysqlJar="/home/buzas/Downloads/mysql-connector-java-5.1.33.jar"
-instDir="/home/buzas/work"       # wildly, uly will be installed here
+instDir="/home/buzas/work"       # wildly, jsfwf will be installed here
 mysqlUser="feri"
 wildflyPort="8080"
 
@@ -16,9 +16,9 @@ wildflyPort="8080"
 # Do not modify these values
 wildflyName="$(basename $wildflyZip .zip)"
 export JBOSS_HOME="$instDir/$wildflyName"
-ulyRoot="$instDir/uly"
-ulyName="$(basename $ulyZip .zip)"
-utilDir="$ulyRoot/util"
+jsfwfRoot="$instDir/jsfwf"
+jsfwfName="$(basename $jsfwfZip .zip)"
+utilDir="$jsfwfRoot/util"
 createSql="$utilDir/create.sql"
 importSql="$utilDir/import.sql"
 scDir="$JBOSS_HOME/standalone/configuration"
@@ -72,7 +72,7 @@ function checkPort() {
     pause "If it seems to be used, press 'n' and kill it."
 }
 
-# ----------- Functions for Uly -------------
+# ----------- Functions for jsfwf -------------
 
 function checkEnv() {
     INFO "Checking environment"
@@ -84,7 +84,7 @@ function checkEnv() {
     which mvn   || error "Program 'mvn' not found"
 
     checkFileExists "$wildflyZip"
-    checkFileExists "$ulyZip"
+    checkFileExists "$jsfwfZip"
     checkFileExists "$mysqlJar"
  
     [ ! -d "$instDir" ] && mkdir -p "$instDir"
@@ -103,9 +103,9 @@ function extract() {
     unzip -q "$wildflyZip" || error_exit "Error unzipping $wildflyZip to $instDir"
     checkDirExists "$wildflyName"
 
-    INFO "Extracting $ulyZip to $instDir"
-    unzip -q "$ulyZip" || error_exit "Error unzipping $ulyZip to $instDir"
-    checkDirExists "$ulyName"
+    INFO "Extracting $jsfwfZip to $instDir"
+    unzip -q "$jsfwfZip" || error_exit "Error unzipping $jsfwfZip to $instDir"
+    checkDirExists "$jsfwfName"
     
     INFO "Directories created under $instDir:"
     ls "$instDir"
@@ -113,7 +113,7 @@ function extract() {
     #INFO "Removing directory $JBOSS_HOME/domain" # this is a bad idea
     #rm -rf "$JBOSS_HOME/domain"
     
-    # Manually added ulyDomain to original standalone.xml (it is in uly.zip)
+    # Manually added jsfwfDomain to original standalone.xml (it is in jsfwf.zip)
     copyFile "$scDir/standalone.xml" "$scDir/standalone_ori.xml"  # save the original
     copyFile "$utilDir/standalone.xml" "$scDir/standalone.xml"
 
@@ -188,9 +188,9 @@ function createDatabase() {
 
 function makeDeploy() {
 
-    INFO "Building, deploying from under $ulyRoot"
-    cd $ulyRoot
-    checkFileExists "$ulyRoot/pom.xml"
+    INFO "Building, deploying from under $jsfwfRoot"
+    cd $jsfwfRoot
+    checkFileExists "$jsfwfRoot/pom.xml"
 
     mvn clean package wildfly:deploy
 }

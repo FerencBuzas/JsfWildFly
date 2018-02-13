@@ -3,11 +3,11 @@
 CREATE USER IF NOT EXISTS 'feri'@'localhost' IDENTIFIED BY 'feri';
 GRANT ALL PRIVILEGES ON *.* TO 'feri'@'localhost' WITH GRANT OPTION;
 
-DROP DATABASE IF EXISTS uly;
+DROP DATABASE IF EXISTS jsfwf;
 
-CREATE DATABASE uly;
+CREATE DATABASE jsfwf;
 
-USE uly;
+USE jsfwf;
 
 -- -------------------------------------
 

@@ -7,7 +7,7 @@ MySQL adatbázis
 ------------------
 
 DDL és DML
-    $ROOT/uly-ear/src/main/application/META-INF/uly-ds.xml  # adatbázis user neve ('feri')
+    $ROOT/jsfwf-ear/src/main/application/META-INF/jsfwf-ds.xml  # adatbázis user neve ('feri')
     $ROOT/work/create.sql   # minden jogot megad 'feri'-nek, táblákat létrehoz  
     $ROOT/work/import.sql   # tesztadatok a táblákba (3+3 user is)
     
@@ -34,7 +34,7 @@ A <wildfly>/standalone/configuration/standalone.xml-t bemásoltam $ROOT/work/-be
 Fő változtatások az eredetihez képest:
 
   - mysql driver megadása (h2 alá):
-  - autentikációs adatok: ld. "FORM" illetve "ulyDomain" 
+  - autentikációs adatok: ld. "FORM" illetve "jsfwfDomain" 
        
 Futtatás
 ----------------------
@@ -44,7 +44,7 @@ Futtatás
   $ bin/standalone.sh & 
   $ cd $ROOT
   $ mvn clean package wildfly:deploy
-  # browser: localhost:8080/uly-web
+  # browser: localhost:8080/jsfwf-web
   
 Teendők (TODO)
 ===============
