@@ -26,6 +26,7 @@ Pedig látszik a logban, hogy használja a principalsQuery-t és a rolesQuery-t,
 Tehát megtörténik a rolesQuery beolvasása, mégsem lesz request.isUserInRole() igaz, csak "**"-ra.
 
 Kínomban magam is beolvasom a Myuser, Myrole táblákat, és aszerint engedélyezem a menüpontokat.
+Akinek van 'Admin' role-ja, az engedélyezhet, más ('User') csak saját kérelmet írhat.
 
 Mindenesetre:
 A <wildfly>/standalone/configuration/standalone.xml-t bemásoltam $ROOT/work/-be.

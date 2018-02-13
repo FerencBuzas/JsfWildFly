@@ -76,11 +76,20 @@
                 <socket-binding http="management-http"/>
             </http-interface>
         </management-interfaces>
+        <access-control provider="simple">
+            <role-mapping>
+                <role name="SuperUser">
+                    <include>
+                        <user name="$local"/>
+                    </include>
+                </role>
+            </role-mapping>
+        </access-control>
     </management>
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:3.0">
             <console-handler name="CONSOLE">
-                <level name="TRACE"/>
+                <level name="DEBUG"/>              <!-- Feri -->
                 <formatter>
                     <named-formatter name="COLOR-PATTERN"/>
                 </formatter>
@@ -97,15 +106,15 @@
                 <level name="WARN"/>
             </logger>
             <logger category="org.jboss.as.config">
-                <level name="INFO"/>
-            </logger>
-            <logger category="org.jboss.security">
                 <level name="DEBUG"/>
             </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
-            <logger category="ulygroup">
+            <logger category="org.jboss.security">   <!-- Feri -->
+                <level name="DEBUG"/>
+            </logger>
+            <logger category="ulygroup">   <!-- Feri -->
                 <level name="DEBUG"/>
             </logger>
             <root-logger>
@@ -116,10 +125,10 @@
                 </handlers>
             </root-logger>
             <formatter name="PATTERN">
-                <pattern-formatter pattern="%d{MM-dd HH:mm} %-5p [%c] (%t) %s%e%n"/>
+                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
             <formatter name="COLOR-PATTERN">
-                <pattern-formatter pattern="> %K{level}%d{HH:mm} %-5p %C{2} %s%e%n"/>
+                <pattern-formatter pattern="%K{level}%d{HH:mm} %-5p %C{2] %s%e%n"/>                 <!-- modified by Feri -->
             </formatter>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:batch-jberet:2.0">
@@ -150,7 +159,7 @@
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
                     <driver name="mysql" module="com.mysql.driver">
-                        <driver-class>com.mysql.jdbc.Driver</driver-class>
+                        <xa-datasource-class>com.mysql.jdbc.Driver</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -284,7 +293,7 @@
                 <http-authentication-factory name="application-http-authentication" http-server-mechanism-factory="global" security-domain="ApplicationDomain">
                     <mechanism-configuration>
                         <mechanism mechanism-name="BASIC">
-                            <mechanism-realm realm-name="ApplicationRealm"/>
+                            <mechanism-realm realm-name="Application Realm"/>
                         </mechanism>
                         <mechanism mechanism-name="FORM">
                             <mechanism-realm realm-name="ApplicationRealm"/>
@@ -527,9 +536,4 @@
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
     </socket-binding-group>
-    <deployments>
-        <deployment name="uly-ear.ear" runtime-name="uly-ear.ear">
-            <content sha1="8bb36b7888940ba5d09a3002223a7ba79c6b3e1a"/>
-        </deployment>
-    </deployments>
 </server>
